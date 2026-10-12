@@ -129,6 +129,55 @@ export function TimelineSemestersSlide({
     }
   };
 
+  // State to manage smooth expansion and collapse exit lifecycle
+  const [displayModalSemester, setDisplayModalSemester] = React.useState(activeModalSemester);
+  const [isExiting, setIsExiting] = React.useState(false);
+  const exitTimerRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (activeModalSemester !== null && activeModalSemester !== undefined && activeModalSemester >= 1 && activeModalSemester <= 6) {
+      if (exitTimerRef.current) {
+        clearTimeout(exitTimerRef.current);
+        exitTimerRef.current = null;
+      }
+      setIsExiting(false);
+      setDisplayModalSemester(activeModalSemester);
+    } else if (displayModalSemester !== null && !isExiting) {
+      // Trigger collapse animation when external state closes modal
+      setIsExiting(true);
+      exitTimerRef.current = setTimeout(() => {
+        setDisplayModalSemester(null);
+        setIsExiting(false);
+      }, 330);
+    }
+    return () => {
+      if (exitTimerRef.current) clearTimeout(exitTimerRef.current);
+    };
+  }, [activeModalSemester, displayModalSemester, isExiting]);
+
+  const handleCloseModal = React.useCallback(() => {
+    if (isExiting || displayModalSemester === null) return;
+    if (soundEnabled) playTactileClick(soundEnabled);
+    setIsExiting(true);
+    if (exitTimerRef.current) clearTimeout(exitTimerRef.current);
+    exitTimerRef.current = setTimeout(() => {
+      setDisplayModalSemester(null);
+      setIsExiting(false);
+      setActiveModalSemester(null);
+    }, 330);
+  }, [isExiting, displayModalSemester, soundEnabled]);
+
+  // Global Escape key to collapse popup
+  React.useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && displayModalSemester !== null && !isExiting) {
+        handleCloseModal();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [displayModalSemester, isExiting, handleCloseModal]);
+
   const modalSubSlide = externalSetModalSubSlide !== undefined
     ? externalModalSubSlide
     : (externalSetSem1SubSlide !== undefined ? externalSem1SubSlide : internalModalSubSlide);
@@ -145,12 +194,14 @@ export function TimelineSemestersSlide({
   };
 
   const isModalOpen = activeModalSemester !== null && activeModalSemester !== undefined && activeModalSemester >= 1 && activeModalSemester <= 6;
+  const isModalVisible = displayModalSemester !== null && displayModalSemester !== undefined && displayModalSemester >= 1 && displayModalSemester <= 6;
   const isSem1Expanded = activeModalSemester === 1;
   const setIsSem1Expanded = (val) => setActiveModalSemester(val ? 1 : null);
   const sem1SubSlide = modalSubSlide;
   const setSem1SubSlide = setModalSubSlide;
 
-  const currentSemData = (activeModalSemester && SEMESTER_POPUP_DATA[activeModalSemester]) ? SEMESTER_POPUP_DATA[activeModalSemester] : null;
+  const resolvedSemesterNum = displayModalSemester || activeModalSemester;
+  const currentSemData = (resolvedSemesterNum && SEMESTER_POPUP_DATA[resolvedSemesterNum]) ? SEMESTER_POPUP_DATA[resolvedSemesterNum] : null;
   const currentSubSlideData = currentSemData?.subSlides?.find(s => s.num === modalSubSlide) || currentSemData?.subSlides?.[0];
 
   const updateStep = (newStep) => {
@@ -169,16 +220,16 @@ export function TimelineSemestersSlide({
     if (onNext) {
       onNext();
     } else {
-      if (step >= 1 && step <= 6 && !isModalOpen) {
+      if (step >= 1 && step <= 6 && !isModalOpen && !isModalVisible) {
         setActiveModalSemester(step);
         setModalSubSlide(1);
         if (soundEnabled) playTactileClick(soundEnabled);
-      } else if (isModalOpen) {
+      } else if (isModalVisible) {
         if (modalSubSlide < 3) {
           setModalSubSlide(prev => (typeof prev === 'number' ? prev + 1 : 2));
           if (soundEnabled) playTactileClick(soundEnabled);
         } else {
-          setActiveModalSemester(null);
+          handleCloseModal();
           setModalSubSlide(1);
           updateStep(step + 1);
         }
@@ -251,11 +302,11 @@ export function TimelineSemestersSlide({
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          filter: isModalOpen ? 'blur(10px)' : 'none',
-          opacity: isModalOpen ? 0.65 : 1,
-          transform: isModalOpen ? 'scale(0.985)' : 'scale(1)',
+          filter: (isModalVisible && !isExiting) ? 'blur(10px)' : 'none',
+          opacity: (isModalVisible && !isExiting) ? 0.65 : 1,
+          transform: (isModalVisible && !isExiting) ? 'scale(0.985)' : 'scale(1)',
           transition: 'filter 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
-          pointerEvents: isModalOpen ? 'none' : 'auto'
+          pointerEvents: isModalVisible ? 'none' : 'auto'
         }}
       >
         {/* Top Header Row with Interactive Step Controls */}
@@ -1083,13 +1134,13 @@ export function TimelineSemestersSlide({
                 onClick={(e) => {
                   e.stopPropagation();
                   if (idx < 6) {
-                    if (isModalOpen && activeModalSemester === idx + 1) {
-                      setActiveModalSemester(null);
+                    if ((isModalOpen || isModalVisible) && (activeModalSemester === idx + 1 || displayModalSemester === idx + 1)) {
+                      handleCloseModal();
                     } else {
                       setActiveModalSemester(idx + 1);
                       setModalSubSlide(1);
+                      if (soundEnabled) playTactileClick(soundEnabled);
                     }
-                    if (soundEnabled) playTactileClick(soundEnabled);
                     return;
                   }
                   setShowAll(false);
@@ -1396,13 +1447,12 @@ export function TimelineSemestersSlide({
       </div>
 
       {/* 95% Screen Popup Modal with Blurred Background Backdrop */}
-      {isModalOpen && currentSemData && (
+      {isModalVisible && currentSemData && (
         <div
           onClick={(e) => {
             // Clicking the backdrop outside the 95% modal collapses the popup
             if (e.target === e.currentTarget) {
-              setActiveModalSemester(null);
-              if (soundEnabled) playTactileClick(soundEnabled);
+              handleCloseModal();
             }
           }}
           style={{
@@ -1416,12 +1466,15 @@ export function TimelineSemestersSlide({
             alignItems: 'center',
             justifyContent: 'center',
             background: 'rgba(6, 78, 59, 0.22)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
+            backdropFilter: isExiting ? 'blur(0px)' : 'blur(16px)',
+            WebkitBackdropFilter: isExiting ? 'blur(0px)' : 'blur(16px)',
             boxSizing: 'border-box',
             padding: '2.5vh 2.5vw',
             userSelect: 'none',
-            animation: 'backdropFadeIn 0.25s ease-out forwards'
+            animation: isExiting
+              ? 'backdropFadeOut 0.33s cubic-bezier(0.4, 0, 0.2, 1) forwards'
+              : 'backdropFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            pointerEvents: isExiting ? 'none' : 'auto'
           }}
         >
           {/* 95% Occupancy Modal Card */}
@@ -1435,7 +1488,9 @@ export function TimelineSemestersSlide({
               maxHeight: '95vh',
               borderRadius: '28px',
               border: 'var(--border-rim)',
-              boxShadow: '18px 18px 44px rgba(10, 88, 48, 0.14), -14px -14px 38px #ffffff, inset 1px 1px 2px rgba(255, 255, 255, 0.95)',
+              boxShadow: isExiting
+                ? '6px 6px 18px rgba(10, 88, 48, 0.08), -6px -6px 16px #ffffff'
+                : '18px 18px 44px rgba(10, 88, 48, 0.14), -14px -14px 38px #ffffff, inset 1px 1px 2px rgba(255, 255, 255, 0.95)',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
@@ -1449,7 +1504,10 @@ export function TimelineSemestersSlide({
                 linear-gradient(90deg, rgba(13, 104, 56, 0.055) 1px, transparent 1px)
               `,
               backgroundSize: '40px 40px',
-              animation: 'fullScreenTakeoverIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards'
+              animation: isExiting
+                ? 'popupCollapseExit 0.33s cubic-bezier(0.4, 0, 0.2, 1) forwards'
+                : 'popupExpandEnter 0.44s cubic-bezier(0.34, 1.35, 0.64, 1) forwards',
+              transformOrigin: 'center center'
             }}
           >
             {/* Ambient Lighting Glow Matching Slide */}
@@ -1501,7 +1559,8 @@ export function TimelineSemestersSlide({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                gap: '16px'
+                gap: '16px',
+                animation: 'modalHeaderIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <h1 style={{
@@ -1587,8 +1646,7 @@ export function TimelineSemestersSlide({
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      setActiveModalSemester(null);
-                      if (soundEnabled) playTactileClick(soundEnabled);
+                      handleCloseModal();
                     }}
                     title={`Collapse Semester ${currentSemData.code}`}
                     style={{
@@ -1627,12 +1685,12 @@ export function TimelineSemestersSlide({
                       if (currentSemData.semesterNumber < 6) {
                         setActiveModalSemester(currentSemData.semesterNumber + 1);
                         setModalSubSlide(1);
+                        if (soundEnabled) playTactileClick(soundEnabled);
                       } else {
-                        setActiveModalSemester(null);
+                        handleCloseModal();
                         if (setStep) setStep(7);
                         else setInternalStep(7);
                       }
-                      if (soundEnabled) playTactileClick(soundEnabled);
                     }}
                     title={currentSemData.semesterNumber < 6 ? `Advance to Semester ${SEMESTERS[currentSemData.semesterNumber]?.code}` : 'Advance to Year 4'}
                     style={{
@@ -1753,7 +1811,8 @@ export function TimelineSemestersSlide({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                gap: '20px'
+                gap: '20px',
+                animation: 'modalHeroIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
                   <div style={{
@@ -1847,21 +1906,25 @@ export function TimelineSemestersSlide({
 
               {/* 3. ACTIVE SUB-SLIDE CONTENT CARD */}
               {currentSubSlideData && (
-                <div style={{
-                  flex: 1,
-                  background: 'var(--bg-convex)',
-                  border: 'var(--border-rim)',
-                  borderRadius: '24px',
-                  boxShadow: 'var(--nm-raised)',
-                  padding: 'clamp(12px, 1.6vh, 20px) clamp(16px, 1.8vw, 26px)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  gap: 'clamp(8px, 1.2vh, 14px)',
-                  boxSizing: 'border-box',
-                  position: 'relative',
-                  overflow: 'hidden'
-                }}>
+                <div
+                  key={`subslide-content-${currentSemData.semesterNumber}-${modalSubSlide}`}
+                  style={{
+                    flex: 1,
+                    background: 'var(--bg-convex)',
+                    border: 'var(--border-rim)',
+                    borderRadius: '24px',
+                    boxShadow: 'var(--nm-raised)',
+                    padding: 'clamp(12px, 1.6vh, 20px) clamp(16px, 1.8vw, 26px)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    gap: 'clamp(8px, 1.2vh, 14px)',
+                    boxSizing: 'border-box',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    animation: 'subSlideEnter 0.36s cubic-bezier(0.16, 1, 0.3, 1) both'
+                  }}
+                >
                   <div style={{
                     position: 'absolute',
                     top: 0,
@@ -1967,7 +2030,9 @@ export function TimelineSemestersSlide({
                           display: 'flex',
                           flexDirection: 'column',
                           justifyContent: 'space-between',
-                          boxShadow: 'var(--nm-raised-sm)'
+                          boxShadow: 'var(--nm-raised-sm)',
+                          animation: 'modalContentIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) both',
+                          animationDelay: `${0.12 + pIdx * 0.05}s`
                         }}
                       >
                         <div>
@@ -2043,7 +2108,8 @@ export function TimelineSemestersSlide({
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 paddingTop: 'clamp(4px, 0.8vh, 8px)',
-                borderTop: '1px solid rgba(10, 88, 48, 0.12)'
+                borderTop: '1px solid rgba(10, 88, 48, 0.12)',
+                animation: 'modalNavIn 0.36s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both'
               }}>
                 {/* Back Button */}
                 <button
@@ -2057,8 +2123,7 @@ export function TimelineSemestersSlide({
                       setModalSubSlide(3);
                       if (soundEnabled) playTactileClick(soundEnabled);
                     } else {
-                      setActiveModalSemester(null);
-                      if (soundEnabled) playTactileClick(soundEnabled);
+                      handleCloseModal();
                     }
                   }}
                   style={{
@@ -2164,11 +2229,10 @@ export function TimelineSemestersSlide({
                       setModalSubSlide(1);
                       if (soundEnabled) playTactileClick(soundEnabled);
                     } else {
-                      setActiveModalSemester(null);
+                      handleCloseModal();
                       setModalSubSlide(1);
                       if (setStep) setStep(7);
                       else setInternalStep(7);
-                      if (soundEnabled) playTactileClick(soundEnabled);
                     }
                   }}
                   style={{

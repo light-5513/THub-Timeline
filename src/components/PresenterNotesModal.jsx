@@ -2,7 +2,39 @@ import React from 'react';
 import { FileText, X, Lightbulb, Clock } from 'lucide-react';
 
 export function PresenterNotesModal({ isOpen, onClose, currentSlide, slideIndex, totalSlides }) {
-  if (!isOpen) return null;
+  const [shouldRender, setShouldRender] = React.useState(isOpen);
+  const [isExiting, setIsExiting] = React.useState(false);
+  const exitTimerRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (isOpen) {
+      if (exitTimerRef.current) clearTimeout(exitTimerRef.current);
+      setShouldRender(true);
+      setIsExiting(false);
+    } else if (shouldRender && !isExiting) {
+      setIsExiting(true);
+      exitTimerRef.current = setTimeout(() => {
+        setShouldRender(false);
+        setIsExiting(false);
+      }, 280);
+    }
+    return () => {
+      if (exitTimerRef.current) clearTimeout(exitTimerRef.current);
+    };
+  }, [isOpen, shouldRender, isExiting]);
+
+  const handleClose = () => {
+    if (isExiting) return;
+    setIsExiting(true);
+    if (exitTimerRef.current) clearTimeout(exitTimerRef.current);
+    exitTimerRef.current = setTimeout(() => {
+      setShouldRender(false);
+      setIsExiting(false);
+      onClose();
+    }, 280);
+  };
+
+  if (!shouldRender) return null;
 
   return (
     <div style={{
@@ -14,10 +46,14 @@ export function PresenterNotesModal({ isOpen, onClose, currentSlide, slideIndex,
       borderRadius: '24px',
       padding: '24px',
       background: 'var(--bg-convex)',
-      boxShadow: 'var(--nm-raised-lg)',
+      boxShadow: isExiting ? 'var(--nm-raised-sm)' : 'var(--nm-raised-lg)',
       border: 'var(--border-rim)',
       zIndex: 100,
-      animation: 'softEntrance 0.3s cubic-bezier(0.16, 1, 0.3, 1) both'
+      animation: isExiting
+        ? 'presenterModalExit 0.28s cubic-bezier(0.4, 0, 0.2, 1) forwards'
+        : 'presenterModalEnter 0.38s cubic-bezier(0.34, 1.45, 0.64, 1) forwards',
+      transformOrigin: 'bottom right',
+      pointerEvents: isExiting ? 'none' : 'auto'
     }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
@@ -46,7 +82,7 @@ export function PresenterNotesModal({ isOpen, onClose, currentSlide, slideIndex,
         </div>
 
         <button
-          onClick={onClose}
+          onClick={handleClose}
           style={{
             width: '30px',
             height: '30px',
