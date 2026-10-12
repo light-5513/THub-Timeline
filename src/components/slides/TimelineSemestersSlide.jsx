@@ -133,6 +133,28 @@ export function TimelineSemestersSlide({
   const [displayModalSemester, setDisplayModalSemester] = React.useState(activeModalSemester);
   const [isExiting, setIsExiting] = React.useState(false);
   const exitTimerRef = React.useRef(null);
+  const semesterCardRefs = React.useRef({});
+  const [modalOrigin, setModalOrigin] = React.useState('50% 60%');
+
+  const updateModalOrigin = React.useCallback((semNum) => {
+    const targetSem = semNum || displayModalSemester || activeModalSemester;
+    if (targetSem && semesterCardRefs.current[targetSem]) {
+      const rect = semesterCardRefs.current[targetSem].getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+      setModalOrigin(`${Math.round(x)}px ${Math.round(y)}px`);
+    } else if (targetSem) {
+      const colPercent = 9 + (targetSem - 1) * 11;
+      setModalOrigin(`${colPercent}% 60%`);
+    }
+  }, [displayModalSemester, activeModalSemester]);
+
+  React.useEffect(() => {
+    updateModalOrigin();
+    const handleResize = () => updateModalOrigin();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [displayModalSemester, activeModalSemester, updateModalOrigin]);
 
   React.useEffect(() => {
     if (activeModalSemester !== null && activeModalSemester !== undefined && activeModalSemester >= 1 && activeModalSemester <= 6) {
@@ -142,18 +164,19 @@ export function TimelineSemestersSlide({
       }
       setIsExiting(false);
       setDisplayModalSemester(activeModalSemester);
+      updateModalOrigin(activeModalSemester);
     } else if (displayModalSemester !== null && !isExiting) {
-      // Trigger collapse animation when external state closes modal
+      // Trigger slow collapse animation when external state closes modal
       setIsExiting(true);
       exitTimerRef.current = setTimeout(() => {
         setDisplayModalSemester(null);
         setIsExiting(false);
-      }, 330);
+      }, 600);
     }
     return () => {
       if (exitTimerRef.current) clearTimeout(exitTimerRef.current);
     };
-  }, [activeModalSemester, displayModalSemester, isExiting]);
+  }, [activeModalSemester, displayModalSemester, isExiting, updateModalOrigin]);
 
   const handleCloseModal = React.useCallback(() => {
     if (isExiting || displayModalSemester === null) return;
@@ -164,7 +187,7 @@ export function TimelineSemestersSlide({
       setDisplayModalSemester(null);
       setIsExiting(false);
       setActiveModalSemester(null);
-    }, 330);
+    }, 600);
   }, [isExiting, displayModalSemester, soundEnabled]);
 
   // Global Escape key to collapse popup
@@ -305,7 +328,7 @@ export function TimelineSemestersSlide({
           filter: (isModalVisible && !isExiting) ? 'blur(10px)' : 'none',
           opacity: (isModalVisible && !isExiting) ? 0.65 : 1,
           transform: (isModalVisible && !isExiting) ? 'scale(0.985)' : 'scale(1)',
-          transition: 'filter 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+          transition: 'filter 0.60s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.60s ease, transform 0.60s cubic-bezier(0.16, 1, 0.3, 1)',
           pointerEvents: isModalVisible ? 'none' : 'auto'
         }}
       >
@@ -1115,11 +1138,14 @@ export function TimelineSemestersSlide({
           {SEMESTERS.map((sem, idx) => {
             const isRevealed = showAll || idx < step;
             const isCurrent = !showAll && (idx === step - 1);
-            const isCardActive = isModalOpen && activeModalSemester === (idx + 1);
+            const isCardActive = (isModalOpen || isModalVisible) && (activeModalSemester === (idx + 1) || displayModalSemester === (idx + 1));
             const isSem1Active = idx === 0 && isCardActive;
             return (
               <div
                 key={sem.code}
+                ref={(el) => {
+                  if (el) semesterCardRefs.current[idx + 1] = el;
+                }}
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
@@ -1137,6 +1163,7 @@ export function TimelineSemestersSlide({
                     if ((isModalOpen || isModalVisible) && (activeModalSemester === idx + 1 || displayModalSemester === idx + 1)) {
                       handleCloseModal();
                     } else {
+                      updateModalOrigin(idx + 1);
                       setActiveModalSemester(idx + 1);
                       setModalSubSlide(1);
                       if (soundEnabled) playTactileClick(soundEnabled);
@@ -1241,17 +1268,17 @@ export function TimelineSemestersSlide({
                   textAlign: 'center',
                   fontFamily: 'var(--font-heading)',
                   boxShadow: isCardActive
-                    ? `0 12px 30px ${sem.color}88, 0 0 0 2px #34d399`
+                    ? `0 14px 34px ${sem.color}99, 0 0 0 3px #10b981`
                     : isCurrent
                       ? `0 10px 28px ${sem.color}60`
                       : `0 8px 22px ${sem.color}35`,
                   border: isCardActive
-                    ? '2px solid #34d399'
+                    ? '2px solid #10b981'
                     : isCurrent
                       ? '2px solid #ffffff'
                       : '1px solid rgba(255, 255, 255, 0.25)',
-                  transform: isCardActive ? 'scale(1.04)' : isCurrent ? 'scale(1.03)' : 'scale(1)',
-                  transition: 'all 0.3s ease',
+                  transform: isCardActive ? 'scale(1.06) translateY(-4px)' : isCurrent ? 'scale(1.03)' : 'scale(1)',
+                  transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
                   position: 'relative'
                 }}>
                   <div style={{
@@ -1315,10 +1342,12 @@ export function TimelineSemestersSlide({
                   minHeight: 'clamp(200px, 32vh, 320px)',
                   borderRadius: '24px',
                   background: 'var(--bg-convex)',
-                  border: 'var(--border-rim)',
-                  boxShadow: isCurrent
-                    ? 'var(--nm-raised-lg)'
-                    : 'var(--nm-raised)',
+                  border: isCardActive ? '2px solid rgba(16, 185, 129, 0.6)' : 'var(--border-rim)',
+                  boxShadow: isCardActive
+                    ? '0 16px 36px rgba(10, 88, 48, 0.22), 0 0 0 3px rgba(16, 185, 129, 0.35)'
+                    : isCurrent
+                      ? 'var(--nm-raised-lg)'
+                      : 'var(--nm-raised)',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
@@ -1328,7 +1357,8 @@ export function TimelineSemestersSlide({
                   boxSizing: 'border-box',
                   position: 'relative',
                   overflow: 'hidden',
-                  transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease'
+                  transform: isCardActive ? 'scale(1.03) translateY(-2px)' : 'scale(1)',
+                  transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease, border 0.5s ease'
                 }}>
                   {/* Top Subtle Color Accent Line */}
                   <div style={{
@@ -1472,8 +1502,8 @@ export function TimelineSemestersSlide({
             padding: '2.5vh 2.5vw',
             userSelect: 'none',
             animation: isExiting
-              ? 'backdropFadeOut 0.33s cubic-bezier(0.4, 0, 0.2, 1) forwards'
-              : 'backdropFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              ? 'backdropFadeOut 0.60s cubic-bezier(0.25, 1, 0.5, 1) forwards'
+              : 'backdropFadeIn 0.70s cubic-bezier(0.16, 1, 0.3, 1) forwards',
             pointerEvents: isExiting ? 'none' : 'auto'
           }}
         >
@@ -1505,9 +1535,10 @@ export function TimelineSemestersSlide({
               `,
               backgroundSize: '40px 40px',
               animation: isExiting
-                ? 'popupCollapseExit 0.33s cubic-bezier(0.4, 0, 0.2, 1) forwards'
-                : 'popupExpandEnter 0.44s cubic-bezier(0.34, 1.35, 0.64, 1) forwards',
-              transformOrigin: 'center center'
+                ? 'popupCollapseExit 0.60s cubic-bezier(0.25, 1, 0.5, 1) forwards'
+                : 'popupExpandEnter 0.72s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              transformOrigin: modalOrigin,
+              willChange: 'transform, opacity'
             }}
           >
             {/* Ambient Lighting Glow Matching Slide */}
@@ -1552,7 +1583,10 @@ export function TimelineSemestersSlide({
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
-              gap: 'clamp(10px, 1.6vh, 20px)'
+              gap: 'clamp(10px, 1.6vh, 20px)',
+              animation: isExiting
+                ? 'modalContentShrinkConceal 0.55s ease-in forwards'
+                : 'modalContentExpandReveal 0.72s cubic-bezier(0.16, 1, 0.3, 1) forwards'
             }}>
               {/* 1. Top Header Row */}
               <div style={{
@@ -1616,6 +1650,7 @@ export function TimelineSemestersSlide({
                           onClick={(e) => {
                             e.stopPropagation();
                             if (semNum <= 6) {
+                              updateModalOrigin(semNum);
                               setActiveModalSemester(semNum);
                               setModalSubSlide(1);
                               if (soundEnabled) playTactileClick(soundEnabled);
@@ -1683,6 +1718,7 @@ export function TimelineSemestersSlide({
                     onClick={(e) => {
                       e.stopPropagation();
                       if (currentSemData.semesterNumber < 6) {
+                        updateModalOrigin(currentSemData.semesterNumber + 1);
                         setActiveModalSemester(currentSemData.semesterNumber + 1);
                         setModalSubSlide(1);
                         if (soundEnabled) playTactileClick(soundEnabled);
@@ -2119,6 +2155,7 @@ export function TimelineSemestersSlide({
                       setModalSubSlide(prev => prev - 1);
                       if (soundEnabled) playTactileClick(soundEnabled);
                     } else if (currentSemData.semesterNumber > 1) {
+                      updateModalOrigin(currentSemData.semesterNumber - 1);
                       setActiveModalSemester(currentSemData.semesterNumber - 1);
                       setModalSubSlide(3);
                       if (soundEnabled) playTactileClick(soundEnabled);
@@ -2225,6 +2262,7 @@ export function TimelineSemestersSlide({
                       setModalSubSlide(prev => prev + 1);
                       if (soundEnabled) playTactileClick(soundEnabled);
                     } else if (currentSemData.semesterNumber < 6) {
+                      updateModalOrigin(currentSemData.semesterNumber + 1);
                       setActiveModalSemester(currentSemData.semesterNumber + 1);
                       setModalSubSlide(1);
                       if (soundEnabled) playTactileClick(soundEnabled);

@@ -16,7 +16,7 @@ export function PresenterNotesModal({ isOpen, onClose, currentSlide, slideIndex,
       exitTimerRef.current = setTimeout(() => {
         setShouldRender(false);
         setIsExiting(false);
-      }, 280);
+      }, 480);
     }
     return () => {
       if (exitTimerRef.current) clearTimeout(exitTimerRef.current);
@@ -31,7 +31,7 @@ export function PresenterNotesModal({ isOpen, onClose, currentSlide, slideIndex,
       setShouldRender(false);
       setIsExiting(false);
       onClose();
-    }, 280);
+    }, 480);
   };
 
   if (!shouldRender) return null;
@@ -50,8 +50,8 @@ export function PresenterNotesModal({ isOpen, onClose, currentSlide, slideIndex,
       border: 'var(--border-rim)',
       zIndex: 100,
       animation: isExiting
-        ? 'presenterModalExit 0.28s cubic-bezier(0.4, 0, 0.2, 1) forwards'
-        : 'presenterModalEnter 0.38s cubic-bezier(0.34, 1.45, 0.64, 1) forwards',
+        ? 'presenterModalExit 0.48s cubic-bezier(0.25, 1, 0.5, 1) forwards'
+        : 'presenterModalEnter 0.56s cubic-bezier(0.16, 1, 0.3, 1) forwards',
       transformOrigin: 'bottom right',
       pointerEvents: isExiting ? 'none' : 'auto'
     }}>

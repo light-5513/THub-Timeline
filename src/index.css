@@ -334,20 +334,19 @@ html, body {
 @keyframes popupExpandEnter {
   0% {
     opacity: 0;
-    transform: scale(0.85) translateY(42px);
-    filter: blur(14px);
+    transform: scale(0.16);
+    filter: blur(8px);
   }
-  60% {
-    opacity: 1;
-    transform: scale(1.022) translateY(-6px);
+  28% {
+    opacity: 0.95;
     filter: blur(0px);
   }
-  82% {
-    transform: scale(0.992) translateY(2px);
+  86% {
+    transform: scale(1.012);
   }
   100% {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: scale(1);
     filter: blur(0px);
   }
 }
@@ -355,16 +354,47 @@ html, body {
 @keyframes popupCollapseExit {
   0% {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: scale(1);
     filter: blur(0px);
   }
   20% {
-    transform: scale(1.014) translateY(-3px);
+    opacity: 1;
+    transform: scale(0.985);
   }
   100% {
     opacity: 0;
-    transform: scale(0.84) translateY(38px);
-    filter: blur(12px);
+    transform: scale(0.16);
+    filter: blur(8px);
+  }
+}
+
+@keyframes modalContentExpandReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  30% {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalContentShrinkConceal {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  25% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(10px);
   }
 }
 
@@ -454,16 +484,15 @@ html, body {
 @keyframes presenterModalEnter {
   0% {
     opacity: 0;
-    transform: scale(0.82) translateY(28px) translateX(8px);
-    filter: blur(10px);
+    transform: scale(0.25) translateY(40px) translateX(20px);
+    filter: blur(8px);
   }
-  65% {
+  30% {
     opacity: 1;
-    transform: scale(1.025) translateY(-4px) translateX(-2px);
     filter: blur(0px);
   }
-  85% {
-    transform: scale(0.992) translateY(1px) translateX(1px);
+  86% {
+    transform: scale(1.015) translateY(-2px) translateX(-1px);
   }
   100% {
     opacity: 1;
@@ -479,12 +508,13 @@ html, body {
     filter: blur(0px);
   }
   20% {
-    transform: scale(1.015) translateY(-2px);
+    opacity: 1;
+    transform: scale(0.98);
   }
   100% {
     opacity: 0;
-    transform: scale(0.84) translateY(28px) translateX(8px);
-    filter: blur(10px);
+    transform: scale(0.25) translateY(40px) translateX(20px);
+    filter: blur(8px);
   }
 }
 
