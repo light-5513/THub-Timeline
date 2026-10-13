@@ -125,10 +125,10 @@ test('Semester 8 collapses and holds for the app-level next-slide transition', (
   assert.deepEqual(getTimelineNextState(collapsed), collapsed);
 });
 
-test('Semesters 2, 5, and 7 have their configured slide counts', () => {
+test('Semesters 1 through 7 have their configured slide counts', () => {
   for (let semester = 1; semester <= 8; semester += 1) {
     assert.equal(SEMESTER_POPUP_DATA[semester]?.semesterNumber, semester);
-    const expectedCount = semester === 2 ? 4 : semester === 5 ? 7 : semester === 7 ? 4 : 3;
+    const expectedCount = { 1: 4, 2: 4, 3: 4, 4: 4, 5: 8, 6: 3, 7: 4 }[semester] || 3;
     assert.equal(SEMESTER_POPUP_DATA[semester]?.subSlides.length, expectedCount);
   }
 });
@@ -138,21 +138,21 @@ test('all semester popups keep only numbered navigation and a semester logo', ()
     const popup = SEMESTER_POPUP_DATA[semester];
     assert.ok(popup.logoSrc);
     assert.deepEqual(popup.subSlides.map(({ num }) => num), Array.from(
-      { length: semester === 2 ? 4 : semester === 5 ? 7 : semester === 7 ? 4 : 3 },
+      { length: { 1: 4, 2: 4, 3: 4, 4: 4, 5: 8, 6: 3, 7: 4 }[semester] || 3 },
       (_, index) => index + 1
     ));
     const slidesWithoutContent = semester === 1
-      ? popup.subSlides.slice(3)
+      ? popup.subSlides.slice(4)
       : semester === 2
         ? popup.subSlides.slice(4)
         : semester === 3
-          ? popup.subSlides.slice(3)
+          ? popup.subSlides.slice(4)
         : semester === 4
-            ? popup.subSlides.slice(3)
+            ? popup.subSlides.slice(4)
         : semester === 5
-          ? popup.subSlides.slice(7)
+          ? popup.subSlides.slice(8)
         : semester === 6
-            ? popup.subSlides.slice(2)
+            ? popup.subSlides.slice(3)
         : semester === 7
           ? popup.subSlides.slice(4)
         : popup.subSlides;
@@ -253,7 +253,15 @@ test('Semester 5 third popup slide includes five selection rounds and the undert
     'Communication Interview',
     'Undertaking Form Submission'
   ]);
-  assert.equal(selectionSlide.stages[5].final, true);
+  assert.equal('final' in selectionSlide.stages[5], false);
+  assert.deepEqual(selectionSlide.stages.map(({ icon }) => icon), [
+    'aptitude',
+    'beginnerCoding',
+    'advancedCoding',
+    'technicalInterview',
+    'communicationInterview',
+    'undertaking'
+  ]);
   assert.match(selectionSlide.outcome, /undertaking form/i);
 });
 
@@ -280,6 +288,17 @@ test('Semester 5 seventh popup slide shows only Owl Coder selections and its log
   ]);
   assert.equal('stages' in selectionSlide, false);
   assert.equal('levels' in selectionSlide, false);
+});
+
+test('Semesters 1 through 6 each include monthly coding and typing contests', () => {
+  for (let semester = 1; semester <= 6; semester += 1) {
+    const contestSlide = SEMESTER_POPUP_DATA[semester].subSlides.find(({ contests }) => contests);
+    assert.ok(contestSlide, `Semester ${semester} should include a contest slide`);
+    assert.deepEqual(contestSlide.contests.map(({ title }) => title), [
+      'Monthly Coding Contests',
+      'Monthly Typing Contests'
+    ]);
+  }
 });
 
 test('Semester 6 first popup slide has the six requested selection rounds', () => {
@@ -311,6 +330,7 @@ test('Semesters 1 through 4 first popup slides cover entrance test and interview
     const firstSubSlide = SEMESTER_POPUP_DATA[semester].subSlides[0];
     assert.equal(firstSubSlide.title, 'Selection & Shortlisting Process');
     assert.deepEqual(firstSubSlide.stages.map(({ title }) => title), ['Entrance Test', 'Interview']);
+    assert.deepEqual(firstSubSlide.stages.map(({ icon }) => icon), ['entranceTest', 'interview']);
     assert.match(firstSubSlide.outcome, /selection or shortlisting/i);
   }
 });

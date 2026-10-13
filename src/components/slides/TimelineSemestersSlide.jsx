@@ -1,5 +1,5 @@
 import React from 'react';
-import { Brain, Braces, ClipboardCheck, Code2, Keyboard, MessagesSquare, Terminal } from 'lucide-react';
+import { Brain, Braces, ClipboardCheck, Code2, FileCheck2, FilePenLine, Keyboard, MessagesSquare, Terminal, UsersRound } from 'lucide-react';
 import { playTactileClick, playSuccessChime } from '../../utils/soundEffects';
 import { SEMESTER_POPUP_DATA } from '../../data/semesterDetailsData';
 import { YouTubeVideo } from '../YouTubeVideo';
@@ -93,12 +93,15 @@ const SEMESTERS = [
 ];
 
 const SELECTION_STAGE_ICONS = {
+  entranceTest: FilePenLine,
+  interview: UsersRound,
   aptitude: Brain,
   beginnerCoding: Code2,
   intermediateCoding: Braces,
   advancedCoding: Terminal,
   technicalInterview: ClipboardCheck,
-  communicationInterview: MessagesSquare
+  communicationInterview: MessagesSquare,
+  undertaking: FileCheck2
 };
 
 export function TimelineSemestersSlide({
@@ -1736,30 +1739,23 @@ export function TimelineSemestersSlide({
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'center',
-                      gap: 'clamp(18px, 2.4vh, 28px)',
+                      gap: currentSubSlideData.stages.length <= 2 ? 'clamp(26px, 4vh, 44px)' : 'clamp(18px, 2.4vh, 28px)',
                       boxSizing: 'border-box'
                     }}>
                       <div>
-                        <div style={{
-                          color: 'var(--accent-primary)',
-                          fontSize: '0.74rem',
-                          fontWeight: 900,
-                          letterSpacing: '0.1em',
-                          textTransform: 'uppercase',
-                          marginBottom: '8px'
-                        }}>
-                          Semester {currentSemData.semesterNumber} • Candidate Intake
-                        </div>
                         <h2 style={{
                           color: 'var(--text-main)',
                           fontFamily: 'var(--font-heading)',
-                          fontSize: 'clamp(1.6rem, 2.5vw, 2.4rem)',
+                          fontSize: currentSubSlideData.stages.length <= 2
+                            ? 'clamp(2rem, 3.2vw, 3rem)'
+                            : 'clamp(1.6rem, 2.5vw, 2.4rem)',
                           fontWeight: 900,
-                          lineHeight: 1.15
+                          lineHeight: 1.15,
+                          textAlign: currentSubSlideData.stages.length <= 2 ? 'center' : 'left'
                         }}>
                           {currentSubSlideData.title}
                         </h2>
-                        {currentSubSlideData.description && (
+                        {currentSubSlideData.description && currentSubSlideData.stages.length > 2 && (
                           <p style={{
                             color: 'var(--text-muted)',
                             fontSize: 'clamp(0.9rem, 1vw, 1.05rem)',
@@ -1782,20 +1778,32 @@ export function TimelineSemestersSlide({
                           const StageIcon = SELECTION_STAGE_ICONS[stage.icon];
                           return (
                             <div key={stage.title} style={{
-                              minHeight: currentSubSlideData.stages.length > 4 ? 'clamp(112px, 14vh, 150px)' : '130px',
-                              padding: 'clamp(18px, 2vw, 28px)',
+                              minHeight: currentSubSlideData.stages.length > 4
+                                ? 'clamp(140px, 17vh, 180px)'
+                                : 'clamp(290px, 37vh, 370px)',
+                              padding: currentSubSlideData.stages.length > 4
+                                ? 'clamp(18px, 2vw, 28px)'
+                                : 'clamp(26px, 3vw, 42px)',
                               borderRadius: '18px',
-                              background: stage.final ? 'var(--bg-well)' : 'var(--bg-convex)',
-                              border: stage.final ? '2px solid var(--accent-primary)' : 'var(--border-rim)',
-                              boxShadow: stage.final ? 'var(--nm-inset-sm)' : 'var(--nm-raised-sm)'
+                              background: 'var(--bg-convex)',
+                              border: 'var(--border-rim)',
+                              boxShadow: 'var(--nm-raised-sm)'
                             }}>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                              <div style={{
+                                display: 'flex',
+                                flexDirection: currentSubSlideData.stages.length > 4 ? 'row' : 'column',
+                                alignItems: currentSubSlideData.stages.length > 4 ? 'center' : 'center',
+                                justifyContent: currentSubSlideData.stages.length > 4 ? 'flex-start' : 'center',
+                                height: '100%',
+                                gap: currentSubSlideData.stages.length > 4 ? '14px' : '22px',
+                                textAlign: currentSubSlideData.stages.length > 4 ? 'left' : 'center'
+                              }}>
                                 {StageIcon && (
                                   <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    flex: '0 0 48px',
-                                    borderRadius: '14px',
+                                    width: currentSubSlideData.stages.length > 4 ? '52px' : '148px',
+                                    height: currentSubSlideData.stages.length > 4 ? '52px' : '148px',
+                                    flex: currentSubSlideData.stages.length > 4 ? '0 0 52px' : '0 0 148px',
+                                    borderRadius: currentSubSlideData.stages.length > 4 ? '15px' : '38px',
                                     background: 'var(--bg-well)',
                                     boxShadow: 'var(--nm-inset-sm)',
                                     color: 'var(--accent-primary)',
@@ -1803,7 +1811,11 @@ export function TimelineSemestersSlide({
                                     alignItems: 'center',
                                     justifyContent: 'center'
                                   }}>
-                                    <StageIcon size={24} strokeWidth={1.9} aria-hidden="true" />
+                                    <StageIcon
+                                      size={currentSubSlideData.stages.length > 4 ? 26 : 78}
+                                      strokeWidth={1.8}
+                                      aria-hidden="true"
+                                    />
                                   </div>
                                 )}
                                 <div style={{ minWidth: 0 }}>
@@ -1812,20 +1824,20 @@ export function TimelineSemestersSlide({
                                     fontFamily: 'var(--font-mono)',
                                     fontSize: '0.76rem',
                                     fontWeight: 700,
-                                    marginBottom: '8px'
+                                    marginBottom: currentSubSlideData.stages.length > 4 ? '8px' : '10px'
                                   }}>
-                                    {stage.final ? 'FINAL STEP' : `ROUND 0${index + 1}`}
+                                    {`ROUND 0${index + 1}`}
                                   </div>
                                   <h3 style={{
                                     color: 'var(--text-main)',
                                     fontFamily: 'var(--font-heading)',
-                                    fontSize: '1.05rem',
+                                    fontSize: currentSubSlideData.stages.length > 4 ? '1.05rem' : 'clamp(1.5rem, 2.2vw, 2rem)',
                                     fontWeight: 800,
                                     marginBottom: stage.description ? '6px' : 0
                                   }}>
                                     {stage.title}
                                   </h3>
-                                  {stage.description && (
+                                  {stage.description && currentSubSlideData.stages.length > 2 && (
                                     <p style={{
                                       color: 'var(--text-muted)',
                                       fontSize: '0.9rem',
@@ -1841,7 +1853,7 @@ export function TimelineSemestersSlide({
                         })}
                       </div>
 
-                      {currentSubSlideData.outcome && <div style={{
+                      {currentSubSlideData.outcome && currentSubSlideData.stages.length > 2 && <div style={{
                         padding: '14px 18px',
                         borderRadius: '14px',
                         background: 'var(--bg-well)',

@@ -17,14 +17,26 @@ const createSelectionShortlistingSlide = (num = 1) => ({
   stages: [
     {
       title: 'Entrance Test',
+      icon: 'entranceTest',
       description: 'An entrance assessment used as part of candidate selection and shortlisting.'
     },
     {
       title: 'Interview',
+      icon: 'interview',
       description: 'An interview used alongside the entrance test to support the selection decision.'
     }
   ],
   outcome: 'The entrance test and interview together inform the selection or shortlisting outcome.'
+});
+
+const createMonthlyContestsSlide = (num) => ({
+  num,
+  tabShort: `Sub-Slide 0${num}`,
+  title: 'Monthly Contests',
+  contests: [
+    { title: 'Monthly Coding Contests', icon: 'coding' },
+    { title: 'Monthly Typing Contests', icon: 'typing' }
+  ]
 });
 
 export const SEMESTER_POPUP_DATA = {
@@ -48,7 +60,8 @@ export const SEMESTER_POPUP_DATA = {
         tabShort: 'Sub-Slide 03',
         featureTitle: 'T-Connect',
         videoId: 'vpBMPKUCvuY'
-      }
+      },
+      createMonthlyContestsSlide(4)
     ]
   }),
   2: createSemesterPopup({
@@ -66,15 +79,7 @@ export const SEMESTER_POPUP_DATA = {
           { title: 'Prompt Engineering', logoSrc: '/assets/prompt-engineering-logo.svg' }
         ]
       },
-      {
-        num: 3,
-        tabShort: 'Sub-Slide 03',
-        title: 'Monthly Contests',
-        contests: [
-          { title: 'Monthly Coding Contests', icon: 'coding' },
-          { title: 'Monthly Typing Contests', icon: 'typing' }
-        ]
-      },
+      createMonthlyContestsSlide(3),
       {
         num: 4,
         tabShort: 'Sub-Slide 04',
@@ -120,7 +125,8 @@ export const SEMESTER_POPUP_DATA = {
           { src: '/assets/t-square-clean-07.jpg', alt: 'Students viewing a T Square demonstration', orientation: 'wide' },
           { src: '/assets/t-square-clean-08.jpg', alt: 'T Square presentation audience', orientation: 'landscape' }
         ]
-      }
+      },
+      createMonthlyContestsSlide(4)
     ]
   }),
   4: createSemesterPopup({
@@ -150,7 +156,8 @@ export const SEMESTER_POPUP_DATA = {
           { src: '/assets/SKILLUP CODER.png', alt: 'Skill Up Coder logo' },
           { src: '/assets/MOON CODER.png', alt: 'Moon Coders logo' }
         ]
-      }
+      },
+      createMonthlyContestsSlide(4)
     ]
   }),
   5: createSemesterPopup({
@@ -188,15 +195,15 @@ export const SEMESTER_POPUP_DATA = {
         title: 'Selection Process',
         description: 'Complete the five rounds, then submit the undertaking form.',
         stages: [
-          { title: 'Aptitude & Logic Test', description: 'Round 1 of the selection process.' },
-          { title: 'Beginner Coding', description: 'Round 2 of the selection process.' },
-          { title: 'Advanced Coding', description: 'Round 3 of the selection process.' },
-          { title: 'Technical Interview', description: 'Round 4 of the selection process.' },
-          { title: 'Communication Interview', description: 'Round 5 of the selection process.' },
+          { title: 'Aptitude & Logic Test', icon: 'aptitude', description: 'Round 1 of the selection process.' },
+          { title: 'Beginner Coding', icon: 'beginnerCoding', description: 'Round 2 of the selection process.' },
+          { title: 'Advanced Coding', icon: 'advancedCoding', description: 'Round 3 of the selection process.' },
+          { title: 'Technical Interview', icon: 'technicalInterview', description: 'Round 4 of the selection process.' },
+          { title: 'Communication Interview', icon: 'communicationInterview', description: 'Round 5 of the selection process.' },
           {
             title: 'Undertaking Form Submission',
-            description: 'Final step: submit the undertaking form.',
-            final: true
+            icon: 'undertaking',
+            description: 'Submit the undertaking form.'
           }
         ],
         outcome: 'The student must submit the undertaking form after completing the five rounds.'
@@ -235,7 +242,8 @@ export const SEMESTER_POPUP_DATA = {
         tabShort: 'Sub-Slide 07',
         featureTitle: 'Owl Coder Selections',
         featureLogoSrc: '/assets/Owl Coder Gradient Mascot Logo.png'
-      }
+      },
+      createMonthlyContestsSlide(8)
     ]
   }),
   6: createSemesterPopup({
@@ -271,7 +279,7 @@ export const SEMESTER_POPUP_DATA = {
         tabShort: 'Sub-Slide 02',
         videoId: 't9aB4kHGk0w'
       },
-      { num: 3, tabShort: 'Sub-Slide 03' }
+      createMonthlyContestsSlide(3)
     ]
   }),
   7: createSemesterPopup({

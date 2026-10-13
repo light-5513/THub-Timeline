@@ -26,7 +26,8 @@ export function HubHoppersGallery({ images, label = 'Image gallery', showNumbers
                 <img
                   src={image.src}
                   alt={group === 0 ? image.alt : ''}
-                  loading="lazy"
+                  loading="eager"
+                  decoding="async"
                   draggable="false"
                 />
                 {showNumbers && group === 0 && (
