@@ -2,39 +2,44 @@ import React from 'react';
 
 const MOU_PARTNERS = [
   {
-    name: 'Automation Anywhere',
-    logo: '/assets/Automation Anywhere.png',
-    delay: '0.4s'
+    name: 'Red Hat Academy',
+    logo: '/assets/RHA_Logos_Logo-Red_Hat-Academy-A-Standard-RGB-1024x257.png',
+    delay: '0.12s'
   },
   {
     name: 'Cisco Networking Academy',
     logo: '/assets/Cisco_Networking_Academy.svg.webp',
-    delay: '1.1s'
+    delay: '0.25s'
   },
   {
     name: 'Mile2 Cyber Security',
     logo: '/assets/mile2_authorized_training_center_8x_enhanced.png',
-    delay: '1.8s'
+    delay: '0.38s'
   },
   {
-    name: 'Red Hat Academy',
-    logo: '/assets/RHA_Logos_Logo-Red_Hat-Academy-A-Standard-RGB-1024x257.png',
-    delay: '2.5s'
+    name: 'AWS Academy',
+    logo: '/assets/AWS ACADEMY.png',
+    delay: '0.51s'
   },
   {
-    name: 'Amazon Web Services',
-    logo: '/assets/aws.svg',
-    delay: '3.2s'
+    name: 'Automation Anywhere',
+    logo: '/assets/Automation Anywhere.png',
+    delay: '0.64s'
   },
   {
-    name: 'Pega Systems',
-    logo: '/assets/pega.png',
-    delay: '3.9s'
+    name: 'Splunk',
+    logo: '/assets/Splunk-Logo.png',
+    delay: '0.77s'
   },
   {
-    name: 'ServiceNow',
-    logo: '/assets/sno_partner-network-logo.png',
-    delay: '4.6s'
+    name: 'MongoDB University',
+    logo: '/assets/mongodb university.png',
+    delay: '0.9s'
+  },
+  {
+    name: 'Oracle Academy',
+    logo: '/assets/Oracle_Academy_rgb.png',
+    delay: '1.03s'
   }
 ];
 
@@ -122,7 +127,7 @@ export function MousSlide() {
           flexWrap: 'wrap',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: 'clamp(24px, 3.2vw, 48px)',
+          gap: 'clamp(18px, 2.3vw, 40px)',
           maxWidth: '1440px',
           width: '100%'
         }}>
@@ -131,28 +136,23 @@ export function MousSlide() {
               key={partner.name}
               className="animate-reveal-slow"
               style={{
-                width: 'clamp(240px, 20vw, 330px)',
-                height: 'clamp(100px, 13vh, 135px)',
+                width: 'clamp(240px, 22vw, 360px)',
+                height: 'clamp(110px, 14vh, 150px)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: 'clamp(14px, 2vh, 22px) clamp(20px, 2vw, 32px)',
+                padding: '4px',
                 boxSizing: 'border-box',
-                background: 'var(--bg-surface)',
-                boxShadow: 'var(--nm-raised)',
-                border: 'var(--border-rim)',
-                borderRadius: '24px',
                 animationDelay: partner.delay,
-                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                cursor: 'pointer'
+                transition: 'transform 0.3s ease'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-4px) scale(1.03)';
-                e.currentTarget.style.boxShadow = '14px 14px 32px rgba(10, 88, 48, 0.11), -14px -14px 32px #ffffff';
+                const logo = e.currentTarget.querySelector('img');
+                if (logo) logo.style.transform = 'perspective(900px) rotateY(0deg) rotateX(0deg) translateY(-3px) scale(1.08)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                e.currentTarget.style.boxShadow = 'var(--nm-raised)';
+                const logo = e.currentTarget.querySelector('img');
+                if (logo) logo.style.transform = 'perspective(900px) rotateY(-6deg) rotateX(2deg)';
               }}
             >
               <img
@@ -162,7 +162,10 @@ export function MousSlide() {
                   maxWidth: '100%',
                   maxHeight: '100%',
                   objectFit: 'contain',
-                  display: 'block'
+                  display: 'block',
+                  filter: 'drop-shadow(0 14px 16px rgba(2, 44, 34, 0.2))',
+                  transform: 'perspective(900px) rotateY(-6deg) rotateX(2deg)',
+                  transition: 'transform 0.35s ease, filter 0.35s ease'
                 }}
               />
             </div>

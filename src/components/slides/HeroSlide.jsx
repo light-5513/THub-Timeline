@@ -19,46 +19,31 @@ export function HeroSlide({ onNext }) {
         position: 'relative'
       }}
     >
-      {/* Soft Neumorphic Island Card */}
+      {/* Opening content, with the transparent Technical Hub logo as the focal point */}
       <div
         style={{
-          background: 'var(--bg-convex)',
-          boxShadow: 'var(--nm-raised-lg)',
-          border: 'var(--border-rim)',
-          borderRadius: '36px',
+          background: 'transparent',
+          boxShadow: 'none',
+          border: 'none',
           padding: 'clamp(36px, 5.5vh, 64px) clamp(36px, 5vw, 76px)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          maxWidth: '820px',
-          width: '90%',
-          position: 'relative',
-          transition: 'transform 0.3s ease, box-shadow 0.3s ease'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'translateY(-3px)';
-          e.currentTarget.style.boxShadow = '18px 18px 40px rgba(10, 88, 48, 0.11), -18px -18px 40px #ffffff';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'translateY(0)';
-          e.currentTarget.style.boxShadow = 'var(--nm-raised-lg)';
+          maxWidth: '1100px',
+          width: '100%',
+          position: 'relative'
         }}
       >
-        {/* Soft Recessed Logo Well */}
+        {/* Transparent logo area */}
         <div
           className="animate-float"
           style={{
-            background: 'var(--bg-surface)',
-            boxShadow: 'var(--nm-raised-sm)',
-            border: 'var(--border-rim)',
-            borderRadius: '24px',
-            padding: '24px 38px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            marginBottom: '32px',
-            maxWidth: '520px',
+            marginBottom: 'clamp(20px, 3vh, 32px)',
+            maxWidth: '900px',
             width: '100%'
           }}
         >
@@ -66,8 +51,8 @@ export function HeroSlide({ onNext }) {
             src="/assets/Technical Hub.png"
             alt="Technical Hub"
             style={{
-              maxWidth: '100%',
-              maxHeight: '170px',
+              maxWidth: 'min(82vw, 860px)',
+              maxHeight: 'clamp(220px, 34vh, 360px)',
               width: 'auto',
               height: 'auto',
               objectFit: 'contain',

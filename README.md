@@ -27,19 +27,13 @@ The entire user interface is designed in a **Soft Neumorphic White & Dark Green*
 
 ## 🚀 Key Features
 
-### 1. 11 Interactive Presentation Slides
+### 1. Six Interactive Presentation Slides
 - **Slide 00 • Executive Proposal (Hero)**: Academic span, flagship tracks, and institution partnership metrics.
 - **Slide 01 • Centre of Excellence (COE)**: Frontier AI lab featuring Anthropic Claude and OpenAI advanced engineering tracks.
-- **Slide 02 • Academic MoUs**: Premier industry partnerships across Automation Anywhere, Cisco, Red Hat, AWS, Mile2, Pega, and ServiceNow.
-- **Slide 03 • 8-Semester Evolution Roadmap**: The flagship animated interactive timeline board.
-- **Slide 04 • The Master Blueprint (Overview)**: 4-Year evolution arc connecting Phase 01 through Phase 04.
-- **Slides 05–08 • Phase Detail Deep Dives**:
-  - *Year 1*: Algorithmic DNA, Owl Coder, Java Foundations Associate, Myna Platform.
-  - *Year 2*: Systems, Linux & Infrastructure (Red Hat Academy, Cisco Networking Academy, Docker).
-  - *Year 3*: Enterprise Platforms & Automation (Pega CSA, Automation Anywhere RPA, ServiceNow, Mile2 Cybersecurity).
-  - *Year 4*: Frontier AI & Product Incubator (AI Ready Engineer, Claude & OpenAI SDKs, GitHub Copilot, Project Space).
-- **Slide 09 • Integrated Skilling Engine (Ecosystem)**: Interactive quadrant matrix showing synergy between Owl Coder, Myna, Global Academies, and Project Space.
-- **Slide 10 • Strategic Outcomes & ROI**: Placement package lift (300%+), 100% verified credentials, NAAC/NBA accreditation lift, and celebratory launch action.
+- **Slide 02 • Academic MoUs**: Partner logos for Red Hat Academy, Cisco Networking Academy, Mile2, AWS Academy, Automation Anywhere, Splunk, MongoDB University, and Oracle Academy.
+- **Slide 03 • 8-Semester Evolution Roadmap**: The flagship animated interactive timeline board and semester deep dives.
+- **Slide 04 • Student Progress, Connected**: Animated pipelines connect learning platforms with placement, faculty, corporate, and parent stakeholders.
+- **Slide 05 • Achievements**: A scrolling gallery of placement and student achievement images.
 
 ### 2. 95% Viewport Deep-Dive Popup Modal
 Clicking on any semester on the timeline board expands a focused **95% Viewport Modal** with a frosted dark-green backdrop blur:

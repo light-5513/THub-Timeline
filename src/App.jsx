@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { timelineSlides } from './data/timelineData';
+import { SEMESTER_POPUP_DATA } from './data/semesterDetailsData';
 import { HeaderNav } from './components/HeaderNav';
 import { TimelineScrubber } from './components/TimelineScrubber';
 import { HeroSlide } from './components/slides/HeroSlide';
@@ -10,9 +11,12 @@ import { OverviewSlide } from './components/slides/OverviewSlide';
 import { PhaseSlide } from './components/slides/PhaseSlide';
 import { EcosystemSlide } from './components/slides/EcosystemSlide';
 import { OutcomesSlide } from './components/slides/OutcomesSlide';
+import { StakeholderFlowSlide } from './components/StakeholderFlowSlide';
+import { AchievementsSlide } from './components/AchievementsSlide';
 import { PresenterNotesModal } from './components/PresenterNotesModal';
 import { PanoramaView } from './components/PanoramaView';
 import { playTactileClick, playSlideWhoosh, playSuccessChime } from './utils/soundEffects';
+import { getTimelineNextState } from './utils/timelineFlow';
 
 class SlideErrorBoundary extends React.Component {
   constructor(props) {
@@ -78,7 +82,8 @@ export function App() {
   const [timelineStep, setTimelineStep] = useState(1);
   const [timelineActiveSemesterPopup, setTimelineActiveSemesterPopup] = useState(null); // null | 1..6
   const [timelineModalSubSlide, setTimelineModalSubSlide] = useState(1); // 1..3
-
+  const [timelineCompletedSemester, setTimelineCompletedSemester] = useState(null);
+  const [timelineCompletionReady, setTimelineCompletionReady] = useState(false);
   // Backwards compatibility helpers
   const timelineSem1Expanded = timelineActiveSemesterPopup === 1;
   const setTimelineSem1Expanded = (val) => setTimelineActiveSemesterPopup(val ? 1 : null);
@@ -94,6 +99,12 @@ export function App() {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
+  useEffect(() => {
+    if (!timelineCompletedSemester) return undefined;
+    const timer = setTimeout(() => setTimelineCompletionReady(true), 1300);
+    return () => clearTimeout(timer);
+  }, [timelineCompletedSemester]);
+
   // Handle slide transitions with audio and direction
   const goToSlide = (newIndex, direction = 'next') => {
     if (newIndex < 0 || newIndex >= timelineSlides.length) return;
@@ -103,31 +114,35 @@ export function App() {
     setTimelineStep(1);
     setTimelineActiveSemesterPopup(null);
     setTimelineModalSubSlide(1);
+    setTimelineCompletedSemester(null);
+    setTimelineCompletionReady(false);
     playSlideWhoosh(soundEnabled);
   };
 
   const handleNext = () => {
     const isTimelineSlide = timelineSlides[currentSlideIndex]?.type === 'semesters-timeline';
     if (isTimelineSlide) {
-      if (timelineStep >= 1 && timelineStep <= 6) {
-        if (!timelineActiveSemesterPopup) {
-          setTimelineActiveSemesterPopup(timelineStep);
-          setTimelineModalSubSlide(1);
-          playTactileClick(soundEnabled);
-          return;
-        } else {
-          if (timelineModalSubSlide < 3) {
-            setTimelineModalSubSlide(prev => prev + 1);
-            playTactileClick(soundEnabled);
-            return;
-          } else {
-            setTimelineActiveSemesterPopup(null);
-            setTimelineModalSubSlide(1);
-            setTimelineStep(prev => prev + 1);
-            playTactileClick(soundEnabled);
-            return;
-          }
-        }
+      if (timelineCompletedSemester && !timelineCompletionReady) return;
+      if (timelineCompletedSemester === 8) {
+        goToSlide(currentSlideIndex + 1, 'next');
+        return;
+      }
+      if (timelineCompletedSemester || timelineActiveSemesterPopup || (timelineStep >= 1 && timelineStep <= 8)) {
+        const totalSubSlides = SEMESTER_POPUP_DATA[timelineActiveSemesterPopup]?.subSlides.length || 3;
+        const nextState = getTimelineNextState({
+          step: timelineStep,
+          activeSemester: timelineActiveSemesterPopup,
+          subSlide: timelineModalSubSlide,
+          completedSemester: timelineCompletedSemester,
+          totalSubSlides
+        });
+        setTimelineStep(nextState.step);
+        setTimelineActiveSemesterPopup(nextState.activeSemester);
+        setTimelineModalSubSlide(nextState.subSlide);
+        setTimelineCompletedSemester(nextState.completedSemester);
+        if (nextState.completedSemester) setTimelineCompletionReady(false);
+        playTactileClick(soundEnabled);
+        return;
       }
       if (timelineStep < 8) {
         setTimelineStep(prev => prev + 1);
@@ -160,9 +175,10 @@ export function App() {
         if (timelineStep > 1) {
           const prevStep = timelineStep - 1;
           setTimelineStep(prevStep);
-          if (prevStep <= 6) {
+          setTimelineCompletedSemester(null);
+          if (prevStep <= 8) {
             setTimelineActiveSemesterPopup(prevStep);
-            setTimelineModalSubSlide(3);
+            setTimelineModalSubSlide(SEMESTER_POPUP_DATA[prevStep]?.subSlides.length || 3);
           }
           playTactileClick(soundEnabled);
           return;
@@ -186,6 +202,16 @@ export function App() {
       // Ignore if typing in input
       if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
 
+      const activePopupSlide = SEMESTER_POPUP_DATA[timelineActiveSemesterPopup]
+        ?.subSlides.find(subSlide => subSlide.num === timelineModalSubSlide);
+      const isPopupVideoOpen = timelineSlides[currentSlideIndex]?.type === 'semesters-timeline'
+        && Boolean(activePopupSlide?.videoId);
+      if (e.key === ' ' && isPopupVideoOpen) {
+        e.preventDefault();
+        window.dispatchEvent(new Event('popup-video-toggle'));
+        return;
+      }
+
       if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
         e.preventDefault();
         handleNext();
@@ -206,7 +232,7 @@ export function App() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentSlideIndex, timelineStep, timelineActiveSemesterPopup, timelineModalSubSlide, soundEnabled]);
+  }, [currentSlideIndex, timelineStep, timelineActiveSemesterPopup, timelineModalSubSlide, timelineCompletedSemester, timelineCompletionReady, soundEnabled]);
 
   // Touch swipe detection
   const handleTouchStart = (e) => {
@@ -311,6 +337,10 @@ export function App() {
             onPlaySuccess={() => playSuccessChime(soundEnabled)}
           />
         );
+      case 'student-progress-network':
+        return <StakeholderFlowSlide slide={currentSlide} />;
+      case 'achievements-gallery':
+        return <AchievementsSlide slide={currentSlide} />;
       default:
         return <div>Slide {currentSlideIndex}</div>;
     }

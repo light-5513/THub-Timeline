@@ -1,6 +1,9 @@
 import React from 'react';
+import { Brain, Braces, ClipboardCheck, Code2, Keyboard, MessagesSquare, Terminal } from 'lucide-react';
 import { playTactileClick, playSuccessChime } from '../../utils/soundEffects';
 import { SEMESTER_POPUP_DATA } from '../../data/semesterDetailsData';
+import { YouTubeVideo } from '../YouTubeVideo';
+import { HubHoppersGallery } from '../HubHoppersGallery';
 
 const SEMESTERS = [
   {
@@ -27,9 +30,9 @@ const SEMESTERS = [
     code: 'II-I',
     yearLabel: 'YEAR 2',
     color: '#047857',
-    subtitle: 'AI READY ENGINEER',
+    subtitle: 'SKILL UP CODER',
     logos: [
-      { src: '/assets/ai_ready_engineer.png', alt: 'AI Ready Engineer', height: 'clamp(70px, 10vh, 105px)' }
+      { src: '/assets/SKILLUP CODER.png', alt: 'Skill Up Coder', height: 'clamp(70px, 10vh, 105px)' }
     ],
     delay: '0.3s'
   },
@@ -37,9 +40,10 @@ const SEMESTERS = [
     code: 'II-II',
     yearLabel: 'YEAR 2',
     color: '#065f46',
-    subtitle: 'AI READY ENGINEER',
+    subtitle: 'SKILL UP CODER',
     logos: [
-      { src: '/assets/ai_ready_engineer.png', alt: 'AI Ready Engineer', height: 'clamp(70px, 10vh, 105px)' }
+      { src: '/assets/SKILLUP CODER.png', alt: 'Skill Up Coder', height: 'clamp(70px, 10vh, 105px)' },
+      { src: '/assets/MOON CODER.png', alt: 'Moon Coders', height: 'clamp(54px, 7.5vh, 78px)' }
     ],
     delay: '0.4s'
   },
@@ -47,9 +51,10 @@ const SEMESTERS = [
     code: 'III-I',
     yearLabel: 'YEAR 3',
     color: '#0d6838',
-    subtitle: 'AI READY ENGINEER',
+    subtitle: 'AI READY / DRIVE READY',
     logos: [
-      { src: '/assets/ai_ready_engineer.png', alt: 'AI Ready Engineer', height: 'clamp(70px, 10vh, 105px)' }
+      { src: '/assets/ai_ready_engineer.png', alt: 'AI Ready Engineer', height: 'clamp(58px, 8vh, 82px)' },
+      { src: '/assets/drive-ready-logo.svg', alt: 'Drive Ready', height: 'clamp(68px, 10vh, 90px)', maxWidth: '100%' }
     ],
     delay: '0.5s'
   },
@@ -59,7 +64,9 @@ const SEMESTERS = [
     color: '#15803d',
     subtitle: 'AI READY ENGINEER',
     logos: [
-      { src: '/assets/ai_ready_engineer.png', alt: 'AI Ready Engineer', height: 'clamp(70px, 10vh, 105px)' }
+      { src: '/assets/ai_ready_engineer.png', alt: 'AI Ready Engineer', height: 'clamp(58px, 8vh, 82px)' },
+      { src: '/assets/drive-ready-logo.svg', alt: 'Drive Ready', height: 'clamp(68px, 10vh, 90px)', maxWidth: '100%' },
+      { src: '/assets/Owl Coder Gradient Mascot Logo.png', alt: 'Owl Coder', height: 'clamp(48px, 7vh, 72px)' }
     ],
     delay: '0.6s'
   },
@@ -68,8 +75,8 @@ const SEMESTERS = [
     yearLabel: 'YEAR 4',
     color: '#166534',
     logos: [
-      { src: '/assets/sno_partner-network-logo.png', alt: 'ServiceNow', height: 'clamp(45px, 6.5vh, 65px)' },
-      { src: '/assets/mile2_authorized_training_center_8x_enhanced.png', alt: 'Mile2', height: 'clamp(55px, 7.5vh, 76px)' }
+      { src: '/assets/Project Space.png', alt: 'Project Space', height: 'clamp(58px, 8vh, 82px)' },
+      { src: '/assets/Owl Coder Gradient Mascot Logo.png', alt: 'Owl Coder', height: 'clamp(58px, 8vh, 82px)' }
     ],
     delay: '0.7s'
   },
@@ -84,6 +91,15 @@ const SEMESTERS = [
     delay: '0.8s'
   }
 ];
+
+const SELECTION_STAGE_ICONS = {
+  aptitude: Brain,
+  beginnerCoding: Code2,
+  intermediateCoding: Braces,
+  advancedCoding: Terminal,
+  technicalInterview: ClipboardCheck,
+  communicationInterview: MessagesSquare
+};
 
 export function TimelineSemestersSlide({
   currentStep = 1,
@@ -105,10 +121,11 @@ export function TimelineSemestersSlide({
   const [internalModalSubSlide, setInternalModalSubSlide] = React.useState(1);
   const [showAll, setShowAll] = React.useState(false);
   const [replayKey, setReplayKey] = React.useState(0);
+  const [selectedTracks, setSelectedTracks] = React.useState({});
 
   const step = setStep ? currentStep : internalStep;
 
-  // Resolve active modal semester (1..6 or null)
+  // Resolve active modal semester (1..8 or null)
   let activeModalSemester = null;
   if (externalSetActiveModalSemester !== undefined) {
     activeModalSemester = externalActiveModalSemester;
@@ -157,26 +174,32 @@ export function TimelineSemestersSlide({
   }, [displayModalSemester, activeModalSemester, updateModalOrigin]);
 
   React.useEffect(() => {
-    if (activeModalSemester !== null && activeModalSemester !== undefined && activeModalSemester >= 1 && activeModalSemester <= 6) {
+    if (activeModalSemester !== null && activeModalSemester !== undefined && activeModalSemester >= 1 && activeModalSemester <= 8) {
       if (exitTimerRef.current) {
         clearTimeout(exitTimerRef.current);
         exitTimerRef.current = null;
       }
       setIsExiting(false);
       setDisplayModalSemester(activeModalSemester);
-      updateModalOrigin(activeModalSemester);
-    } else if (displayModalSemester !== null && !isExiting) {
+    } else if (displayModalSemester !== null) {
       // Trigger slow collapse animation when external state closes modal
       setIsExiting(true);
       exitTimerRef.current = setTimeout(() => {
+        exitTimerRef.current = null;
         setDisplayModalSemester(null);
         setIsExiting(false);
-      }, 600);
+      }, 1200);
     }
     return () => {
-      if (exitTimerRef.current) clearTimeout(exitTimerRef.current);
+      if (exitTimerRef.current) {
+        clearTimeout(exitTimerRef.current);
+        exitTimerRef.current = null;
+      }
     };
-  }, [activeModalSemester, displayModalSemester, isExiting, updateModalOrigin]);
+    // This lifecycle intentionally runs only when the requested semester changes;
+    // including displayModalSemester would cancel the exit timer on its first render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeModalSemester]);
 
   const handleCloseModal = React.useCallback(() => {
     if (isExiting || displayModalSemester === null) return;
@@ -187,7 +210,7 @@ export function TimelineSemestersSlide({
       setDisplayModalSemester(null);
       setIsExiting(false);
       setActiveModalSemester(null);
-    }, 600);
+    }, 1200);
   }, [isExiting, displayModalSemester, soundEnabled]);
 
   // Global Escape key to collapse popup
@@ -216,8 +239,8 @@ export function TimelineSemestersSlide({
     }
   };
 
-  const isModalOpen = activeModalSemester !== null && activeModalSemester !== undefined && activeModalSemester >= 1 && activeModalSemester <= 6;
-  const isModalVisible = displayModalSemester !== null && displayModalSemester !== undefined && displayModalSemester >= 1 && displayModalSemester <= 6;
+  const isModalOpen = activeModalSemester !== null && activeModalSemester !== undefined && activeModalSemester >= 1 && activeModalSemester <= 8;
+  const isModalVisible = displayModalSemester !== null && displayModalSemester !== undefined && displayModalSemester >= 1 && displayModalSemester <= 8;
   const isSem1Expanded = activeModalSemester === 1;
   const setIsSem1Expanded = (val) => setActiveModalSemester(val ? 1 : null);
   const sem1SubSlide = modalSubSlide;
@@ -226,6 +249,8 @@ export function TimelineSemestersSlide({
   const resolvedSemesterNum = displayModalSemester || activeModalSemester;
   const currentSemData = (resolvedSemesterNum && SEMESTER_POPUP_DATA[resolvedSemesterNum]) ? SEMESTER_POPUP_DATA[resolvedSemesterNum] : null;
   const currentSubSlideData = currentSemData?.subSlides?.find(s => s.num === modalSubSlide) || currentSemData?.subSlides?.[0];
+  const totalModalSubSlides = currentSemData?.subSlides?.length || 3;
+  const selectedTrack = currentSemData ? selectedTracks[currentSemData.semesterNumber] : null;
 
   const updateStep = (newStep) => {
     if (newStep === 8 && soundEnabled) {
@@ -243,12 +268,12 @@ export function TimelineSemestersSlide({
     if (onNext) {
       onNext();
     } else {
-      if (step >= 1 && step <= 6 && !isModalOpen && !isModalVisible) {
+      if (step >= 1 && step <= 8 && !isModalOpen && !isModalVisible) {
         setActiveModalSemester(step);
         setModalSubSlide(1);
         if (soundEnabled) playTactileClick(soundEnabled);
       } else if (isModalVisible) {
-        if (modalSubSlide < 3) {
+        if (modalSubSlide < totalModalSubSlides) {
           setModalSubSlide(prev => (typeof prev === 'number' ? prev + 1 : 2));
           if (soundEnabled) playTactileClick(soundEnabled);
         } else {
@@ -328,7 +353,7 @@ export function TimelineSemestersSlide({
           filter: (isModalVisible && !isExiting) ? 'blur(10px)' : 'none',
           opacity: (isModalVisible && !isExiting) ? 0.65 : 1,
           transform: (isModalVisible && !isExiting) ? 'scale(0.985)' : 'scale(1)',
-          transition: 'filter 0.60s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.60s ease, transform 0.60s cubic-bezier(0.16, 1, 0.3, 1)',
+          transition: 'filter 1.20s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.20s ease, transform 1.20s cubic-bezier(0.16, 1, 0.3, 1)',
           pointerEvents: isModalVisible ? 'none' : 'auto'
         }}
       >
@@ -609,7 +634,7 @@ export function TimelineSemestersSlide({
 
             {/* mPod Logo (Official Vector Logo, Right of Screen) */}
             <div style={{
-              width: 'clamp(140px, 10.5vw, 180px)',
+              width: 'clamp(160px, 12.5vw, 220px)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'flex-start',
@@ -621,7 +646,7 @@ export function TimelineSemestersSlide({
                 src="/assets/mpod.png"
                 alt="mPod Platform"
                 style={{
-                  height: 'clamp(36px, 5vh, 48px)',
+                  height: 'clamp(52px, 6.2vh, 64px)',
                   maxWidth: '100%',
                   width: 'auto',
                   objectFit: 'contain',
@@ -767,7 +792,7 @@ export function TimelineSemestersSlide({
 
             {/* J-path Logo (Official Transparent Logo, Right of Screen) */}
             <div style={{
-              width: 'clamp(140px, 10.5vw, 180px)',
+              width: 'clamp(160px, 12.5vw, 220px)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'flex-start',
@@ -779,7 +804,7 @@ export function TimelineSemestersSlide({
                 src="/assets/jpath.png"
                 alt="J-Path Platform"
                 style={{
-                  height: 'clamp(40px, 5.6vh, 56px)',
+                  height: 'clamp(54px, 6.5vh, 70px)',
                   maxWidth: '100%',
                   width: 'auto',
                   objectFit: 'contain',
@@ -925,7 +950,7 @@ export function TimelineSemestersSlide({
 
             {/* Myna Logo (Clean, Transparent, Right of Screen) */}
             <div style={{
-              width: 'clamp(140px, 10.5vw, 180px)',
+              width: 'clamp(160px, 12.5vw, 220px)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'flex-start',
@@ -937,7 +962,7 @@ export function TimelineSemestersSlide({
                 src="/assets/Myna.png"
                 alt="Myna Platform"
                 style={{
-                  height: 'clamp(40px, 5.6vh, 56px)',
+                  height: 'clamp(54px, 6.5vh, 70px)',
                   maxWidth: '100%',
                   width: 'auto',
                   objectFit: 'contain',
@@ -1089,7 +1114,7 @@ export function TimelineSemestersSlide({
 
             {/* Owl Coder Logo (Clean, Transparent, Right of Screen) */}
             <div style={{
-              width: 'clamp(140px, 10.5vw, 180px)',
+              width: 'clamp(160px, 12.5vw, 220px)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'flex-start',
@@ -1101,7 +1126,7 @@ export function TimelineSemestersSlide({
                 src="/assets/Owl Coder Gradient Mascot Logo.png"
                 alt="Owl Coder Platform"
                 style={{
-                  height: 'clamp(44px, 6.2vh, 62px)',
+                  height: 'clamp(58px, 7vh, 78px)',
                   maxWidth: '100%',
                   width: 'auto',
                   objectFit: 'contain',
@@ -1159,13 +1184,16 @@ export function TimelineSemestersSlide({
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  if (idx < 6) {
+                  if (idx < 8) {
+                    setShowAll(false);
                     if ((isModalOpen || isModalVisible) && (activeModalSemester === idx + 1 || displayModalSemester === idx + 1)) {
                       handleCloseModal();
                     } else {
                       updateModalOrigin(idx + 1);
                       setActiveModalSemester(idx + 1);
                       setModalSubSlide(1);
+                      if (setStep) setStep(idx + 1);
+                      else setInternalStep(idx + 1);
                       if (soundEnabled) playTactileClick(soundEnabled);
                     }
                     return;
@@ -1320,7 +1348,7 @@ export function TimelineSemestersSlide({
                       }} />
                     )}
                     {sem.subtitle || 'SEMESTER'}
-                    {idx < 6 && (
+                    {idx < 8 && (
                       <span style={{
                         fontSize: '0.52rem',
                         background: isCardActive ? '#34d399' : 'rgba(255, 255, 255, 0.25)',
@@ -1389,7 +1417,7 @@ export function TimelineSemestersSlide({
                         alt={logoItem.alt}
                         style={{
                           maxHeight: logoItem.height,
-                          maxWidth: '92%',
+                          maxWidth: logoItem.maxWidth || '92%',
                           objectFit: 'contain',
                           display: 'block',
                           filter: 'drop-shadow(0 6px 14px rgba(10, 88, 48, 0.08))',
@@ -1405,8 +1433,8 @@ export function TimelineSemestersSlide({
                     </div>
                   ))}
 
-                  {/* Expand Hint for Semesters 1 to 6 */}
-                  {idx < 6 && !isCardActive && (
+                  {/* Expand Hint for Semesters 1 to 8 */}
+                  {idx < 8 && !isCardActive && (
                     <div style={{
                       position: 'absolute',
                       bottom: '8px',
@@ -1435,7 +1463,7 @@ export function TimelineSemestersSlide({
 
           {/* Right Spacer matching the platform logos column width */}
           <div style={{
-            width: 'clamp(140px, 10.5vw, 180px)',
+            width: 'clamp(160px, 12.5vw, 220px)',
             flexShrink: 0
           }} />
         </div>
@@ -1502,8 +1530,8 @@ export function TimelineSemestersSlide({
             padding: '2.5vh 2.5vw',
             userSelect: 'none',
             animation: isExiting
-              ? 'backdropFadeOut 0.60s cubic-bezier(0.25, 1, 0.5, 1) forwards'
-              : 'backdropFadeIn 0.70s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              ? 'backdropFadeOut 1.20s cubic-bezier(0.25, 1, 0.5, 1) forwards'
+              : 'backdropFadeIn 1.20s cubic-bezier(0.16, 1, 0.3, 1) forwards',
             pointerEvents: isExiting ? 'none' : 'auto'
           }}
         >
@@ -1535,8 +1563,8 @@ export function TimelineSemestersSlide({
               `,
               backgroundSize: '40px 40px',
               animation: isExiting
-                ? 'popupCollapseExit 0.60s cubic-bezier(0.25, 1, 0.5, 1) forwards'
-                : 'popupExpandEnter 0.72s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                ? 'popupCollapseExit 1.20s cubic-bezier(0.25, 1, 0.5, 1) forwards'
+                : 'popupExpandEnter 1.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
               transformOrigin: modalOrigin,
               willChange: 'transform, opacity'
             }}
@@ -1585,185 +1613,9 @@ export function TimelineSemestersSlide({
               justifyContent: 'space-between',
               gap: 'clamp(10px, 1.6vh, 20px)',
               animation: isExiting
-                ? 'modalContentShrinkConceal 0.55s ease-in forwards'
-                : 'modalContentExpandReveal 0.72s cubic-bezier(0.16, 1, 0.3, 1) forwards'
+                ? 'modalContentShrinkConceal 1.10s ease-in forwards'
+                : 'modalContentExpandReveal 1.15s cubic-bezier(0.16, 1, 0.3, 1) forwards'
             }}>
-              {/* 1. Top Header Row */}
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: '16px',
-                animation: 'modalHeaderIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <h1 style={{
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: 'clamp(1.5rem, 2.2vw, 2.4rem)',
-                    fontWeight: 900,
-                    color: '#064e3b',
-                    lineHeight: 1.1,
-                    letterSpacing: '-0.02em',
-                    margin: 0
-                  }}>
-                    8-Semester Evolution Roadmap
-                  </h1>
-                  <span style={{
-                    background: 'var(--bg-well)',
-                    boxShadow: 'var(--nm-inset-sm)',
-                    border: 'var(--border-rim)',
-                    color: '#064e3b',
-                    fontSize: '0.72rem',
-                    fontWeight: 900,
-                    padding: '4px 14px',
-                    borderRadius: '999px',
-                    letterSpacing: '0.06em',
-                    textTransform: 'uppercase'
-                  }}>
-                    Semester {currentSemData.semesterNumber} ({currentSemData.code}) • Detailed View
-                  </span>
-                </div>
-
-                {/* Controls Matching Slide */}
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px'
-                }}>
-                  {/* 8 Semester Step Pills with active highlighted */}
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    background: 'var(--bg-well)',
-                    boxShadow: 'var(--nm-inset-sm)',
-                    padding: '5px 8px',
-                    borderRadius: '16px',
-                    border: 'var(--border-rim)'
-                  }}>
-                    {SEMESTERS.map((sem, idx) => {
-                      const semNum = idx + 1;
-                      const isActive = semNum === currentSemData.semesterNumber;
-                      return (
-                        <button
-                          key={`modal-pill-${sem.code}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (semNum <= 6) {
-                              updateModalOrigin(semNum);
-                              setActiveModalSemester(semNum);
-                              setModalSubSlide(1);
-                              if (soundEnabled) playTactileClick(soundEnabled);
-                            }
-                          }}
-                          style={{
-                            border: 'none',
-                            cursor: semNum <= 6 ? 'pointer' : 'default',
-                            fontFamily: 'var(--font-heading)',
-                            fontSize: 'clamp(0.68rem, 0.76vw, 0.82rem)',
-                            fontWeight: isActive ? 900 : 700,
-                            padding: '5px 10px',
-                            borderRadius: '10px',
-                            lineHeight: 1.2,
-                            background: isActive ? 'linear-gradient(135deg, #064e3b 0%, #047857 100%)' : 'transparent',
-                            color: isActive ? '#ffffff' : '#407a5b',
-                            boxShadow: isActive ? 'var(--nm-raised-sm)' : 'none',
-                            transition: 'all 0.2s ease'
-                          }}
-                        >
-                          {sem.code}
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  {/* Collapse Button */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleCloseModal();
-                    }}
-                    title={`Collapse Semester ${currentSemData.code}`}
-                    style={{
-                      border: 'var(--border-rim)',
-                      background: 'var(--bg-convex)',
-                      color: '#064e3b',
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '0.78rem',
-                      fontWeight: 800,
-                      padding: '7px 16px',
-                      borderRadius: '14px',
-                      cursor: 'pointer',
-                      boxShadow: 'var(--nm-raised-sm)',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      transition: 'all 0.2s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.boxShadow = 'var(--nm-raised)';
-                      e.currentTarget.style.color = '#0a5830';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.boxShadow = 'var(--nm-raised-sm)';
-                      e.currentTarget.style.color = '#064e3b';
-                    }}
-                  >
-                    <span style={{ fontSize: '12px' }}>✕</span>
-                    <span>Collapse View</span>
-                  </button>
-
-                  {/* Next Semester Button */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (currentSemData.semesterNumber < 6) {
-                        updateModalOrigin(currentSemData.semesterNumber + 1);
-                        setActiveModalSemester(currentSemData.semesterNumber + 1);
-                        setModalSubSlide(1);
-                        if (soundEnabled) playTactileClick(soundEnabled);
-                      } else {
-                        handleCloseModal();
-                        if (setStep) setStep(7);
-                        else setInternalStep(7);
-                      }
-                    }}
-                    title={currentSemData.semesterNumber < 6 ? `Advance to Semester ${SEMESTERS[currentSemData.semesterNumber]?.code}` : 'Advance to Year 4'}
-                    style={{
-                      border: 'none',
-                      background: 'linear-gradient(135deg, #064e3b 0%, #047857 100%)',
-                      color: '#ffffff',
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '0.82rem',
-                      fontWeight: 900,
-                      padding: '8px 20px',
-                      borderRadius: '14px',
-                      cursor: 'pointer',
-                      boxShadow: '6px 6px 16px rgba(10, 88, 48, 0.25), -2px -2px 8px #ffffff',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      transition: 'all 0.2s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-1px)';
-                      e.currentTarget.style.boxShadow = '8px 8px 20px rgba(10, 88, 48, 0.32), -3px -3px 10px #ffffff';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = '6px 6px 16px rgba(10, 88, 48, 0.25), -2px -2px 8px #ffffff';
-                    }}
-                  >
-                    <span>
-                      {currentSemData.semesterNumber < 6
-                        ? `Next: Semester ${currentSemData.semesterNumber + 1} (${SEMESTERS[currentSemData.semesterNumber]?.code})`
-                        : 'Advance to Year 4 (IV-I)'}
-                    </span>
-                    <span style={{ fontSize: '1rem' }}>›</span>
-                  </button>
-                </div>
-              </div>
-
               {/* Sub-Slide Pill Switcher Bar */}
               <div style={{
                 display: 'flex',
@@ -1772,23 +1624,28 @@ export function TimelineSemestersSlide({
                 gap: '16px'
               }}>
                 <div style={{
-                  display: 'inline-flex',
+                  display: 'flex',
                   alignItems: 'center',
-                  gap: '8px',
-                  fontSize: '0.74rem',
-                  fontWeight: 900,
-                  color: '#064e3b',
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase'
+                  gap: 'clamp(16px, 2vw, 32px)',
+                  flexWrap: 'wrap'
                 }}>
-                  <span style={{
-                    width: '8px',
-                    height: '8px',
-                    borderRadius: '50%',
-                    background: '#047857',
-                    boxShadow: '0 0 8px rgba(10, 88, 48, 0.5)'
-                  }} />
-                  <span>SEMESTER {currentSemData.semesterNumber} ({currentSemData.code}) CURRICULUM • SUB-SLIDE {modalSubSlide} OF 3</span>
+                  {(currentSubSlideData?.logoOptions || currentSemData.logoOptions).map(logo => (
+                    <img
+                      key={logo.src}
+                      src={logo.src}
+                      alt={logo.alt}
+                      style={{
+                        height: logo.height || ((currentSubSlideData?.logoOptions || currentSemData.logoOptions).length > 1
+                          ? 'clamp(58px, 8vh, 88px)'
+                          : 'clamp(64px, 9vh, 104px)'),
+                        maxWidth: logo.maxWidth || ((currentSubSlideData?.logoOptions || currentSemData.logoOptions).length > 1
+                          ? 'min(34vw, 420px)'
+                          : 'min(45vw, 420px)'),
+                        objectFit: 'contain',
+                        display: 'block'
+                      }}
+                    />
+                  ))}
                 </div>
 
                 {/* 3 Clickable Sub-Slide Tab Pills */}
@@ -1830,311 +1687,505 @@ export function TimelineSemestersSlide({
                         }}
                       >
                         <span style={{ opacity: 0.85 }}>0{sub.num}</span>
-                        <span>{sub.tabShort}</span>
                       </button>
                     );
                   })}
                 </div>
               </div>
 
-              {/* 2. Hero Identity Card */}
-              <div style={{
-                background: 'var(--bg-convex)',
-                border: 'var(--border-rim)',
-                borderRadius: '24px',
-                padding: 'clamp(10px, 1.4vh, 16px) clamp(18px, 2vw, 28px)',
-                boxShadow: 'var(--nm-raised)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: '20px',
-                animation: 'modalHeroIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
-                  <div style={{
-                    background: 'var(--bg-well)',
-                    boxShadow: 'var(--nm-inset-sm)',
-                    border: 'var(--border-rim)',
-                    borderRadius: '18px',
-                    padding: '8px 18px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    <img
-                      src={currentSemData.logoSrc}
-                      alt={currentSemData.phaseTitle}
-                      style={{
-                        height: 'clamp(42px, 5.5vh, 56px)',
-                        width: 'auto',
-                        objectFit: 'contain',
-                        display: 'block'
-                      }}
-                    />
-                  </div>
-                  <div>
-                    <div style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      fontSize: '0.66rem',
-                      fontWeight: 900,
-                      color: '#047857',
-                      letterSpacing: '0.1em',
-                      textTransform: 'uppercase',
-                      marginBottom: '2px'
-                    }}>
-                      <span>🌱</span>
-                      <span>{currentSemData.platformBadge}</span>
-                    </div>
-                    <h2 style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: 'clamp(1.3rem, 1.7vw, 1.85rem)',
-                      fontWeight: 900,
-                      margin: 0,
-                      lineHeight: 1.15,
-                      color: '#064e3b',
-                      letterSpacing: '-0.02em'
-                    }}>
-                      {currentSemData.phaseTitle}
-                    </h2>
-                    <p style={{
-                      margin: '2px 0 0 0',
-                      fontSize: 'clamp(0.74rem, 0.84vw, 0.84rem)',
-                      color: '#1e5a3a',
-                      fontWeight: 600,
-                      lineHeight: 1.3
-                    }}>
-                      {currentSubSlideData?.subTitle}
-                    </p>
-                  </div>
-                </div>
+              {/* No separate identity or curriculum card; semester logo is in the title row. */}
 
-                {/* Dynamic KPI Badges for Active Sub-Slide */}
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  flexShrink: 0
-                }}>
-                  {currentSubSlideData?.kpis?.map((kpi, kIdx) => (
-                    <div
-                      key={`kpi-${kIdx}`}
-                      style={{
-                        background: 'var(--bg-convex)',
-                        border: 'var(--border-rim)',
-                        borderRadius: '16px',
-                        padding: '8px 16px',
-                        textAlign: 'center',
-                        boxShadow: 'var(--nm-raised-sm)'
-                      }}
-                    >
-                      <div style={{ fontSize: '1.15rem', fontWeight: 900, color: '#064e3b', fontFamily: 'var(--font-heading)' }}>
-                        {kpi.value}
-                      </div>
-                      <div style={{ fontSize: '0.64rem', fontWeight: 700, color: '#407a5b', letterSpacing: '0.04em' }}>
-                        {kpi.label}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* 3. ACTIVE SUB-SLIDE CONTENT CARD */}
-              {currentSubSlideData && (
+              {/* Empty content area reserved for the upcoming semester material */}
+              {currentSemData && (
                 <div
                   key={`subslide-content-${currentSemData.semesterNumber}-${modalSubSlide}`}
                   style={{
                     flex: 1,
-                    background: 'var(--bg-convex)',
-                    border: 'var(--border-rim)',
-                    borderRadius: '24px',
-                    boxShadow: 'var(--nm-raised)',
-                    padding: 'clamp(12px, 1.6vh, 20px) clamp(16px, 1.8vw, 26px)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    gap: 'clamp(8px, 1.2vh, 14px)',
-                    boxSizing: 'border-box',
+                    minHeight: currentSubSlideData?.galleryImages
+                      ? 'clamp(400px, 70vh, 760px)'
+                      : (currentSubSlideData?.stages?.length || 0) > 4
+                        ? 'clamp(520px, 64vh, 720px)'
+                        : currentSubSlideData?.videoId
+                          ? currentSubSlideData?.featureLogoSrc
+                            ? 'clamp(560px, 78vh, 820px)'
+                            : 'clamp(440px, 62vh, 700px)'
+                          : currentSubSlideData?.featureLogoSrc
+                            ? 'clamp(420px, 56vh, 620px)'
+                      : 'clamp(220px, 38vh, 480px)',
+                    background: currentSubSlideData?.galleryImages ? 'transparent' : 'var(--bg-convex)',
+                    border: currentSubSlideData?.galleryImages ? 'none' : 'var(--border-rim)',
+                    borderRadius: currentSubSlideData?.galleryImages ? 0 : '24px',
+                    boxShadow: currentSubSlideData?.galleryImages ? 'none' : 'var(--nm-raised)',
                     position: 'relative',
-                    overflow: 'hidden',
+                    overflow: currentSubSlideData?.galleryImages ? 'visible' : 'hidden',
                     animation: 'subSlideEnter 0.36s cubic-bezier(0.16, 1, 0.3, 1) both'
                   }}
                 >
-                  <div style={{
+                  {!currentSubSlideData?.galleryImages && <div style={{
                     position: 'absolute',
                     top: 0,
                     left: 0,
                     right: 0,
                     height: '4px',
                     background: 'linear-gradient(90deg, #064e3b 0%, #047857 50%, #059669 100%)'
-                  }} />
-
-                  {/* Sub-Slide Top Header */}
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    borderBottom: '1px solid rgba(10, 88, 48, 0.12)',
-                    paddingBottom: 'clamp(6px, 0.9vh, 10px)'
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <div style={{
-                        width: '42px',
-                        height: '42px',
-                        borderRadius: '14px',
-                        background: 'linear-gradient(135deg, #064e3b 0%, #047857 100%)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '1.25rem',
-                        boxShadow: 'var(--nm-raised-sm)',
-                        color: '#ffffff'
-                      }}>
-                        {currentSubSlideData.icon || '📌'}
-                      </div>
-                      <div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <span style={{
-                            fontSize: '0.66rem',
-                            fontWeight: 900,
-                            color: '#064e3b',
-                            letterSpacing: '0.08em',
-                            textTransform: 'uppercase'
-                          }}>
-                            SEMESTER {currentSemData.semesterNumber} ({currentSemData.code}) • SUB-SLIDE 0{modalSubSlide}/03
-                          </span>
-                          <span style={{
-                            fontSize: '0.62rem',
-                            fontWeight: 800,
-                            background: 'var(--bg-well)',
-                            boxShadow: 'var(--nm-inset-sm)',
-                            border: 'var(--border-rim)',
-                            color: '#064e3b',
-                            padding: '2px 10px',
-                            borderRadius: '999px'
-                          }}>
-                            {currentSubSlideData.headerBadge}
-                          </span>
-                        </div>
-                        <h3 style={{
-                          fontFamily: 'var(--font-heading)',
-                          fontSize: 'clamp(1.1rem, 1.45vw, 1.55rem)',
-                          fontWeight: 900,
-                          margin: '2px 0 0 0',
-                          color: '#064e3b',
-                          letterSpacing: '-0.02em',
-                          lineHeight: 1.2
-                        }}>
-                          {currentSubSlideData.mainHeading}
-                        </h3>
-                      </div>
-                    </div>
-
+                  }} />}
+                  {currentSubSlideData?.stages && (
                     <div style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      background: 'linear-gradient(135deg, #064e3b 0%, #047857 100%)',
-                      color: '#ffffff',
-                      padding: '6px 16px',
-                      borderRadius: '999px',
-                      fontSize: '0.72rem',
-                      fontWeight: 800,
-                      boxShadow: 'var(--nm-raised-sm)'
+                      height: '100%',
+                      padding: 'clamp(22px, 3vh, 40px) clamp(22px, 3vw, 48px)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      gap: 'clamp(18px, 2.4vh, 28px)',
+                      boxSizing: 'border-box'
                     }}>
-                      <span>🎯</span>
-                      <span>{currentSubSlideData.rightPill}</span>
-                    </div>
-                  </div>
-
-                  {/* 4 Pillars Grid */}
-                  <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(2, 1fr)',
-                    gap: 'clamp(10px, 1.4vw, 18px)',
-                    flex: 1
-                  }}>
-                    {currentSubSlideData.pillars?.map((pillar, pIdx) => (
-                      <div
-                        key={`pillar-${pIdx}`}
-                        style={{
-                          background: 'var(--bg-convex)',
-                          border: 'var(--border-rim)',
-                          borderRadius: '18px',
-                          padding: 'clamp(10px, 1.4vh, 16px) clamp(12px, 1.4vw, 18px)',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'space-between',
-                          boxShadow: 'var(--nm-raised-sm)',
-                          animation: 'modalContentIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) both',
-                          animationDelay: `${0.12 + pIdx * 0.05}s`
-                        }}
-                      >
-                        <div>
-                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                              <span style={{ fontSize: '1.15rem' }}>{pillar.icon}</span>
-                              <span style={{ fontFamily: 'var(--font-heading)', fontSize: '0.94rem', fontWeight: 900, color: '#064e3b' }}>
-                                {pillar.title}
-                              </span>
-                            </div>
-                            <span style={{
-                              fontSize: '0.62rem',
-                              fontWeight: 800,
-                              color: '#064e3b',
-                              background: 'var(--bg-well)',
-                              boxShadow: 'var(--nm-inset-sm)',
-                              border: 'var(--border-rim)',
-                              padding: '2px 8px',
-                              borderRadius: '6px'
-                            }}>
-                              {pillar.tag}
-                            </span>
-                          </div>
-                          <p style={{ margin: '0 0 8px 0', fontSize: '0.76rem', color: '#1e5a3a', lineHeight: 1.4 }}>
-                            {pillar.desc}
-                          </p>
+                      <div>
+                        <div style={{
+                          color: 'var(--accent-primary)',
+                          fontSize: '0.74rem',
+                          fontWeight: 900,
+                          letterSpacing: '0.1em',
+                          textTransform: 'uppercase',
+                          marginBottom: '8px'
+                        }}>
+                          Semester {currentSemData.semesterNumber} • Candidate Intake
                         </div>
-                        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                          {pillar.points?.map((pt, ptIdx) => (
-                            <span
-                              key={`pt-${ptIdx}`}
+                        <h2 style={{
+                          color: 'var(--text-main)',
+                          fontFamily: 'var(--font-heading)',
+                          fontSize: 'clamp(1.6rem, 2.5vw, 2.4rem)',
+                          fontWeight: 900,
+                          lineHeight: 1.15
+                        }}>
+                          {currentSubSlideData.title}
+                        </h2>
+                        {currentSubSlideData.description && (
+                          <p style={{
+                            color: 'var(--text-muted)',
+                            fontSize: 'clamp(0.9rem, 1vw, 1.05rem)',
+                            lineHeight: 1.55,
+                            marginTop: '8px'
+                          }}>
+                            {currentSubSlideData.description}
+                          </p>
+                        )}
+                      </div>
+
+                      <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: currentSubSlideData.stages.length > 4
+                          ? 'repeat(3, minmax(0, 1fr))'
+                          : 'repeat(2, minmax(0, 1fr))',
+                        gap: 'clamp(12px, 1.6vw, 22px)'
+                      }}>
+                        {currentSubSlideData.stages.map((stage, index) => {
+                          const StageIcon = SELECTION_STAGE_ICONS[stage.icon];
+                          return (
+                            <div key={stage.title} style={{
+                              minHeight: currentSubSlideData.stages.length > 4 ? 'clamp(112px, 14vh, 150px)' : '130px',
+                              padding: 'clamp(18px, 2vw, 28px)',
+                              borderRadius: '18px',
+                              background: stage.final ? 'var(--bg-well)' : 'var(--bg-convex)',
+                              border: stage.final ? '2px solid var(--accent-primary)' : 'var(--border-rim)',
+                              boxShadow: stage.final ? 'var(--nm-inset-sm)' : 'var(--nm-raised-sm)'
+                            }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                                {StageIcon && (
+                                  <div style={{
+                                    width: '48px',
+                                    height: '48px',
+                                    flex: '0 0 48px',
+                                    borderRadius: '14px',
+                                    background: 'var(--bg-well)',
+                                    boxShadow: 'var(--nm-inset-sm)',
+                                    color: 'var(--accent-primary)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                  }}>
+                                    <StageIcon size={24} strokeWidth={1.9} aria-hidden="true" />
+                                  </div>
+                                )}
+                                <div style={{ minWidth: 0 }}>
+                                  <div style={{
+                                    color: 'var(--accent-primary)',
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: '0.76rem',
+                                    fontWeight: 700,
+                                    marginBottom: '8px'
+                                  }}>
+                                    {stage.final ? 'FINAL STEP' : `ROUND 0${index + 1}`}
+                                  </div>
+                                  <h3 style={{
+                                    color: 'var(--text-main)',
+                                    fontFamily: 'var(--font-heading)',
+                                    fontSize: '1.05rem',
+                                    fontWeight: 800,
+                                    marginBottom: stage.description ? '6px' : 0
+                                  }}>
+                                    {stage.title}
+                                  </h3>
+                                  {stage.description && (
+                                    <p style={{
+                                      color: 'var(--text-muted)',
+                                      fontSize: '0.9rem',
+                                      lineHeight: 1.5
+                                    }}>
+                                      {stage.description}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {currentSubSlideData.outcome && <div style={{
+                        padding: '14px 18px',
+                        borderRadius: '14px',
+                        background: 'var(--bg-well)',
+                        boxShadow: 'var(--nm-inset-sm)',
+                        color: 'var(--text-main)',
+                        fontSize: '0.9rem',
+                        fontWeight: 700,
+                        lineHeight: 1.5
+                      }}>
+                        {currentSubSlideData.outcome}
+                      </div>}
+                    </div>
+                  )}
+                  {currentSubSlideData?.subjects && (
+                    <div style={{
+                      minHeight: '100%',
+                      padding: 'clamp(22px, 3vh, 40px) clamp(22px, 3vw, 48px)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      gap: 'clamp(18px, 2.4vh, 28px)',
+                      boxSizing: 'border-box'
+                    }}>
+                      <h2 style={{
+                        color: 'var(--text-main)',
+                        fontFamily: 'var(--font-heading)',
+                        fontSize: 'clamp(1.6rem, 2.5vw, 2.4rem)',
+                        fontWeight: 900,
+                        lineHeight: 1.15,
+                        textAlign: 'center'
+                      }}>
+                        {currentSubSlideData.title}
+                      </h2>
+
+                      <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))',
+                        gap: 'clamp(16px, 2vw, 28px)',
+                        maxWidth: '1280px',
+                        width: '100%',
+                        margin: '0 auto'
+                      }}>
+                        {currentSubSlideData.subjects.map(subject => (
+                          <div key={subject.title} style={{
+                            minHeight: 'clamp(220px, 28vh, 300px)',
+                            padding: 'clamp(18px, 2.4vw, 30px)',
+                            borderRadius: '22px',
+                            background: 'var(--bg-convex)',
+                            border: 'var(--border-rim)',
+                            boxShadow: 'var(--nm-raised-sm)',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '14px',
+                            textAlign: 'center'
+                          }}>
+                            <img
+                              src={subject.logoSrc}
+                              alt={`${subject.title} logo`}
                               style={{
-                                fontSize: '0.66rem',
-                                fontWeight: 700,
-                                background: 'var(--bg-well)',
-                                boxShadow: 'var(--nm-inset-sm)',
-                                color: '#064e3b',
-                                padding: '3px 8px',
-                                borderRadius: '6px',
-                                border: 'var(--border-rim)'
+                                width: 'min(100%, 240px)',
+                                height: 'clamp(120px, 17vh, 168px)',
+                                objectFit: 'contain',
+                                display: 'block'
+                              }}
+                            />
+                            <h3 style={{
+                              color: 'var(--text-main)',
+                              fontFamily: 'var(--font-heading)',
+                              fontSize: 'clamp(1.15rem, 1.5vw, 1.4rem)',
+                              fontWeight: 800
+                            }}>
+                              {subject.title}
+                            </h3>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {currentSubSlideData?.trackChoices && (
+                    <div style={{
+                      minHeight: '100%',
+                      padding: 'clamp(22px, 3vh, 40px) clamp(22px, 3vw, 48px)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      gap: 'clamp(18px, 2.4vh, 28px)',
+                      boxSizing: 'border-box'
+                    }}>
+                      <h2 style={{
+                        color: 'var(--text-main)',
+                        fontFamily: 'var(--font-heading)',
+                        fontSize: 'clamp(1.6rem, 2.5vw, 2.4rem)',
+                        fontWeight: 900,
+                        lineHeight: 1.15,
+                        textAlign: 'center'
+                      }}>
+                        {currentSubSlideData.title}
+                      </h2>
+
+                      <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
+                        gap: 'clamp(16px, 2vw, 28px)',
+                        maxWidth: '1040px',
+                        width: '100%',
+                        margin: '0 auto'
+                      }}>
+                        {currentSubSlideData.trackChoices.map(track => {
+                          const isSelected = selectedTrack === track.id;
+                          return (
+                            <button
+                              key={track.id}
+                              type="button"
+                              aria-pressed={isSelected}
+                              onClick={() => setSelectedTracks(previous => ({
+                                ...previous,
+                                [currentSemData.semesterNumber]: track.id
+                              }))}
+                              style={{
+                                minHeight: 'clamp(240px, 30vh, 320px)',
+                                padding: 'clamp(20px, 2.5vw, 32px)',
+                                borderRadius: '22px',
+                                background: 'var(--bg-convex)',
+                                border: isSelected ? '2px solid var(--accent-primary)' : 'var(--border-rim)',
+                                boxShadow: isSelected ? 'var(--nm-raised)' : 'var(--nm-raised-sm)',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '16px',
+                                color: 'var(--text-main)',
+                                fontFamily: 'var(--font-heading)',
+                                cursor: 'pointer',
+                                transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease'
                               }}
                             >
-                              {pt}
-                            </span>
-                          ))}
-                        </div>
+                              <img
+                                src={track.logoSrc}
+                                alt=""
+                                style={{
+                                  width: 'min(100%, 440px)',
+                                  height: 'clamp(100px, 15vh, 160px)',
+                                  objectFit: 'contain',
+                                  display: 'block'
+                                }}
+                              />
+                              <span style={{ fontSize: 'clamp(1.1rem, 1.5vw, 1.4rem)', fontWeight: 800 }}>
+                                {track.title}
+                              </span>
+                              <span style={{
+                                color: 'var(--accent-primary)',
+                                fontSize: '0.78rem',
+                                fontWeight: 800
+                              }}>
+                                {isSelected ? 'Selected' : 'Select track'}
+                              </span>
+                            </button>
+                          );
+                        })}
                       </div>
-                    ))}
-                  </div>
-
-                  {/* Bottom Highlights Summary Banner */}
-                  <div style={{
-                    background: 'var(--bg-well)',
-                    boxShadow: 'var(--nm-inset-sm)',
-                    border: 'var(--border-rim)',
-                    borderRadius: '14px',
-                    padding: 'clamp(8px, 1vh, 12px) clamp(12px, 1.2vw, 18px)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px'
-                  }}>
-                    <span style={{ fontSize: '1.1rem' }}>{currentSubSlideData.summaryIcon || '🎯'}</span>
-                    <div style={{ fontSize: 'clamp(0.7rem, 0.8vw, 0.8rem)', color: '#064e3b', lineHeight: 1.35 }}>
-                      <strong style={{ color: '#0a5830' }}>{currentSubSlideData.summaryTitle}</strong> {currentSubSlideData.summaryText}
                     </div>
-                  </div>
+                  )}
+                  {currentSubSlideData?.contests && (
+                    <div style={{
+                      minHeight: '100%',
+                      padding: 'clamp(22px, 3vh, 40px) clamp(22px, 3vw, 48px)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      gap: 'clamp(18px, 2.4vh, 28px)',
+                      boxSizing: 'border-box'
+                    }}>
+                      <h2 style={{
+                        color: 'var(--text-main)',
+                        fontFamily: 'var(--font-heading)',
+                        fontSize: 'clamp(1.6rem, 2.5vw, 2.4rem)',
+                        fontWeight: 900,
+                        lineHeight: 1.15,
+                        textAlign: 'center'
+                      }}>
+                        {currentSubSlideData.title}
+                      </h2>
+
+                      <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
+                        gap: 'clamp(16px, 2vw, 28px)',
+                        maxWidth: '1040px',
+                        width: '100%',
+                        margin: '0 auto'
+                      }}>
+                        {currentSubSlideData.contests.map(contest => {
+                          const ContestIcon = contest.icon === 'coding' ? Code2 : Keyboard;
+                          return (
+                            <div key={contest.title} style={{
+                              minHeight: 'clamp(220px, 28vh, 300px)',
+                              padding: 'clamp(22px, 2.8vw, 36px)',
+                              borderRadius: '22px',
+                              background: 'var(--bg-convex)',
+                              border: 'var(--border-rim)',
+                              boxShadow: 'var(--nm-raised-sm)',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '20px',
+                              textAlign: 'center'
+                            }}>
+                              <div style={{
+                                width: '104px',
+                                height: '104px',
+                                borderRadius: '28px',
+                                background: 'var(--bg-well)',
+                                boxShadow: 'var(--nm-inset-sm)',
+                                color: 'var(--accent-primary)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                              }}>
+                                <ContestIcon size={52} strokeWidth={1.8} aria-hidden="true" />
+                              </div>
+                              <h3 style={{
+                                color: 'var(--text-main)',
+                                fontFamily: 'var(--font-heading)',
+                                fontSize: 'clamp(1.15rem, 1.5vw, 1.4rem)',
+                                fontWeight: 800
+                              }}>
+                                {contest.title}
+                              </h3>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                  {(currentSubSlideData?.featureTitle || currentSubSlideData?.featureLogoSrc || currentSubSlideData?.videoId) && (
+                    <div style={{
+                      minHeight: currentSubSlideData.galleryImages || currentSubSlideData.featureLogoSrc ? 'auto' : '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 'clamp(14px, 2vh, 22px)',
+                      padding: currentSubSlideData.videoId && !currentSubSlideData.featureTitle
+                        ? 0
+                        : currentSubSlideData.galleryImages || currentSubSlideData.featureLogoSrc
+                          ? 'clamp(14px, 2vh, 24px) clamp(24px, 4vw, 56px) 0'
+                          : 'clamp(24px, 4vw, 56px)',
+                      boxSizing: 'border-box'
+                    }}>
+                      {currentSubSlideData.featureTitle && !currentSubSlideData.hideFeatureTitle && (
+                        currentSubSlideData.videoId && currentSubSlideData.featureLogoSrc ? (
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '14px' }}>
+                            <img
+                              src={currentSubSlideData.featureLogoSrc}
+                              alt={`${currentSubSlideData.featureTitle} icon`}
+                              style={{ width: 'min(16vw, 140px)', height: 'clamp(42px, 8vh, 72px)', objectFit: 'contain' }}
+                            />
+                            <h2 style={{
+                              margin: 0,
+                              color: 'var(--text-main)',
+                              fontFamily: 'var(--font-heading)',
+                              fontSize: 'clamp(1.8rem, 3vw, 2.8rem)',
+                              fontWeight: 900,
+                              letterSpacing: '-0.025em',
+                              textAlign: 'center'
+                            }}>
+                              {currentSubSlideData.featureTitle}
+                            </h2>
+                          </div>
+                        ) : <h2 style={{
+                          margin: 0,
+                          color: 'var(--text-main)',
+                          fontFamily: 'var(--font-heading)',
+                          fontSize: 'clamp(1.8rem, 3vw, 2.8rem)',
+                          fontWeight: 900,
+                          letterSpacing: '-0.025em',
+                          textAlign: 'center'
+                        }}>
+                          {currentSubSlideData.featureTitle}
+                        </h2>
+                      )}
+                      {currentSubSlideData.featureLogoSrc && !currentSubSlideData.videoId && (
+                        <img
+                          src={currentSubSlideData.featureLogoSrc}
+                          alt={`${currentSubSlideData.featureTitle} logo`}
+                          style={{
+                            width: 'min(72vw, 760px)',
+                            maxHeight: '38vh',
+                            objectFit: 'contain',
+                            display: 'block'
+                          }}
+                        />
+                      )}
+                      {currentSubSlideData.featureLogoSrc && currentSubSlideData.hideFeatureTitle && (
+                        <img
+                          src={currentSubSlideData.featureLogoSrc}
+                          alt={`${currentSubSlideData.featureTitle} logo`}
+                          style={{
+                            width: 'min(34vw, 420px)',
+                            maxHeight: '12vh',
+                            objectFit: 'contain',
+                            display: 'block'
+                          }}
+                        />
+                      )}
+                      {currentSubSlideData.videoId && (
+                        <div style={{
+                          width: 'min(100%, 1560px, 110vh)',
+                          aspectRatio: '16 / 9',
+                          borderRadius: '18px',
+                          overflow: 'hidden',
+                          background: '#022c22',
+                          boxShadow: 'var(--nm-raised-lg)',
+                          border: 'var(--border-rim)'
+                        }}>
+                          <YouTubeVideo
+                            videoId={currentSubSlideData.videoId}
+                            title={currentSubSlideData.featureTitle
+                              ? `${currentSubSlideData.featureTitle} video`
+                              : `Semester ${currentSemData.semesterNumber} training video`}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {currentSubSlideData?.galleryImages && (
+                    <div style={{
+                      flex: 1,
+                      minHeight: 'clamp(280px, 34vh, 390px)',
+                      padding: 'clamp(16px, 2vh, 24px) 0',
+                      display: 'flex',
+                      alignItems: 'center',
+                      boxSizing: 'border-box'
+                    }}>
+                      <HubHoppersGallery
+                        images={currentSubSlideData.galleryImages}
+                        label={`${currentSubSlideData.featureTitle} image gallery`}
+                        showNumbers={currentSubSlideData.showImageNumbers}
+                      />
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -2155,9 +2206,12 @@ export function TimelineSemestersSlide({
                       setModalSubSlide(prev => prev - 1);
                       if (soundEnabled) playTactileClick(soundEnabled);
                     } else if (currentSemData.semesterNumber > 1) {
-                      updateModalOrigin(currentSemData.semesterNumber - 1);
-                      setActiveModalSemester(currentSemData.semesterNumber - 1);
-                      setModalSubSlide(3);
+                      const previousSemester = currentSemData.semesterNumber - 1;
+                      updateModalOrigin(previousSemester);
+                      setActiveModalSemester(previousSemester);
+                      setModalSubSlide(SEMESTER_POPUP_DATA[previousSemester]?.subSlides.length || 3);
+                      if (setStep) setStep(previousSemester);
+                      else setInternalStep(previousSemester);
                       if (soundEnabled) playTactileClick(soundEnabled);
                     } else {
                       handleCloseModal();
@@ -2212,7 +2266,7 @@ export function TimelineSemestersSlide({
                     alignItems: 'center',
                     gap: '6px'
                   }}>
-                    {[1, 2, 3].map(num => (
+                    {currentSemData.subSlides.map(({ num }) => (
                       <button
                         key={`stepper-dot-${num}`}
                         onClick={(e) => {
@@ -2258,19 +2312,14 @@ export function TimelineSemestersSlide({
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    if (modalSubSlide < 3) {
+                    if (onNext) {
+                      onNext();
+                    } else if (modalSubSlide < totalModalSubSlides) {
                       setModalSubSlide(prev => prev + 1);
-                      if (soundEnabled) playTactileClick(soundEnabled);
-                    } else if (currentSemData.semesterNumber < 6) {
-                      updateModalOrigin(currentSemData.semesterNumber + 1);
-                      setActiveModalSemester(currentSemData.semesterNumber + 1);
-                      setModalSubSlide(1);
                       if (soundEnabled) playTactileClick(soundEnabled);
                     } else {
                       handleCloseModal();
                       setModalSubSlide(1);
-                      if (setStep) setStep(7);
-                      else setInternalStep(7);
                     }
                   }}
                   style={{
@@ -2299,11 +2348,9 @@ export function TimelineSemestersSlide({
                   }}
                 >
                   <span>
-                    {modalSubSlide < 3
-                      ? `Next: ${currentSemData.subSlides[modalSubSlide]?.tabShort || `Sub-Slide 0${modalSubSlide + 1}`} (${modalSubSlide + 1}/3)`
-                      : currentSemData.semesterNumber < 6
-                        ? `Complete & Advance to Semester ${currentSemData.semesterNumber + 1} (${SEMESTERS[currentSemData.semesterNumber]?.code})`
-                        : 'Complete & Advance to Year 4 (IV-I)'}
+                    {modalSubSlide < totalModalSubSlides
+                      ? `Next: ${currentSemData.subSlides[modalSubSlide]?.tabShort || `Sub-Slide 0${modalSubSlide + 1}`} (${modalSubSlide + 1}/${totalModalSubSlides})`
+                      : `Finish Semester ${currentSemData.semesterNumber}`}
                   </span>
                   <span style={{ fontSize: '1rem' }}>›</span>
                 </button>

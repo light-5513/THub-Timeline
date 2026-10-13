@@ -1,932 +1,338 @@
+const createSemesterPopup = ({ semesterNumber, code, logoSrc, logoOptions, subSlides }) => ({
+  semesterNumber,
+  code,
+  logoSrc,
+  logoOptions: logoOptions || [{ src: logoSrc, alt: `Semester ${semesterNumber} logo` }],
+  subSlides: subSlides || [1, 2, 3].map(num => ({
+    num,
+    tabShort: `Sub-Slide 0${num}`
+  }))
+});
+
+const createSelectionShortlistingSlide = (num = 1) => ({
+  num,
+  tabShort: `Sub-Slide 0${num}`,
+  title: 'Selection & Shortlisting Process',
+  description: 'The entrance test and interview support candidate selection and shortlisting.',
+  stages: [
+    {
+      title: 'Entrance Test',
+      description: 'An entrance assessment used as part of candidate selection and shortlisting.'
+    },
+    {
+      title: 'Interview',
+      description: 'An interview used alongside the entrance test to support the selection decision.'
+    }
+  ],
+  outcome: 'The entrance test and interview together inform the selection or shortlisting outcome.'
+});
+
 export const SEMESTER_POPUP_DATA = {
-  1: {
+  1: createSemesterPopup({
     semesterNumber: 1,
     code: 'I-I',
-    yearLabel: 'YEAR 1',
-    phaseTitle: 'BAMBOO CODER — PHASE 1',
-    platformBadge: 'YEAR 1 • SEMESTER 1 FOUNDATIONAL PLATFORM',
-    color: '#064e3b',
     logoSrc: '/assets/bamboo_coder_phase1.png',
     subSlides: [
-      {
-        num: 1,
-        tabTitle: '01. Entrance Exam Selection',
-        tabShort: 'Entrance Exam Selection',
-        headerBadge: 'Entrance Assessment',
-        subTitle: 'Entrance Assessment: Diagnostic Screening, Logical Aptitude & Tiered Cohort Stratification',
-        mainHeading: 'Student Selection by Comprehensive Entrance Examination',
-        rightPill: '100% Student Participation • Induction Benchmark',
-        icon: '📝',
-        kpis: [
-          { value: '100%', label: 'Cohort Assessed' },
-          { value: 'Diagnostic', label: 'Aptitude Battery' },
-          { value: 'Tiered', label: 'Cohort Mapping' }
-        ],
-        pillars: [
-          {
-            icon: '🧩',
-            title: 'Quantitative & Logical Aptitude Battery',
-            tag: 'Core Thinking',
-            desc: 'Measures innate analytical reasoning, sequence recognition, syllogisms, and numerical problem-solving to identify core intellect without coding prerequisites.',
-            points: ['✓ Pattern Recognition', '✓ Data Deductions']
-          },
-          {
-            icon: '🔄',
-            title: 'Computational Thinking & Logic Tracing',
-            tag: 'Algorithm Tracing',
-            desc: 'Assesses step-by-step instruction comprehension, flowchart tracing, and conditional branching simulations to spot inherent programming aptitude.',
-            points: ['✓ Pseudo-Logic Execution', '✓ Loop Tracing']
-          },
-          {
-            icon: '⌨️',
-            title: 'Baseline Keyboard Velocity & Ergonomics',
-            tag: 'Typing Baseline',
-            desc: 'Measures initial touch-typing speed (WPM) and accuracy to establish individual benchmarks before enrolling into monthly typing acceleration drills.',
-            points: ['✓ Initial WPM Mapping', '✓ Error Rate Profiling']
-          },
-          {
-            icon: '🎯',
-            title: 'Tiered Cohort Stratification & Mentorship',
-            tag: 'Cohort Allocation',
-            desc: 'Stratifies students into targeted development cohorts (Foundational, Accelerated, Advanced) with personalized practice goals and dedicated faculty mentors.',
-            points: ['✓ Targeted Mentorship', '✓ Zero-Drop Scaffolding']
-          }
-        ],
-        summaryIcon: '🎯',
-        summaryTitle: 'Objective Baseline Induction:',
-        summaryText: 'The entrance exam provides an impartial assessment of every student\'s analytical mindset, allowing faculty mentors to scaffold customized practice roadmaps right from Day 1.'
-      },
+      createSelectionShortlistingSlide(),
       {
         num: 2,
-        tabTitle: '02. Monthly Coding Contest',
-        tabShort: 'Monthly Coding Contest',
-        headerBadge: 'Monthly Arena',
-        subTitle: 'Monthly Coding Contest: High-Velocity Algorithmic Problem Solving & Institutional Leaderboards',
-        mainHeading: 'Monthly Algorithmic Coding Contests',
-        rightPill: 'Arena Cycle: 4+ Contests per Semester • 250+ Live Challenges',
-        icon: '💻',
-        kpis: [
-          { value: '250+', label: 'Coding Challenges' },
-          { value: 'Monthly', label: 'Contest Cycle' },
-          { value: 'Automated', label: 'Test Evaluation' }
-        ],
-        pillars: [
-          {
-            icon: '💻',
-            title: 'Progressive Tiered Problem Sets (Easy → Medium → Hard)',
-            tag: 'Tiered Progression',
-            desc: 'Curated algorithmic challenge sets graduated monthly from fundamental syntax and loops into array manipulation, modular functions, and basic math algorithms.',
-            points: ['✓ Algorithmic Rigor', '✓ Edge-Case Resilience']
-          },
-          {
-            icon: '🏆',
-            title: 'Real-Time Institutional Leaderboard & Badges',
-            tag: 'Live Standing',
-            desc: 'Instant feedback engine with dynamic rankings, submission speed tracking, streak bonuses, and digital milestone badges that spur competitive drive.',
-            points: ['✓ Gamified Badges', '✓ Global Campus Rank']
-          },
-          {
-            icon: '⚙️',
-            title: 'Automated Multi-Language Code Judge',
-            tag: 'Instant Judge',
-            desc: 'Cloud sandbox providing sub-second test execution against hidden test cases, memory limits, and strict runtime constraints.',
-            points: ['✓ Sub-Second Verification', '✓ Hidden Corner Cases']
-          },
-          {
-            icon: '🔍',
-            title: 'Post-Contest Editorial & Solution Teardowns',
-            tag: 'Code Review',
-            desc: 'Structured post-mortem sessions breaking down optimal O(n) solutions, space-time complexity analysis, and clean coding best practices.',
-            points: ['✓ O(n) Optimization Focus', '✓ Clean Coding Paradigms']
-          }
-        ],
-        summaryIcon: '💻',
-        summaryTitle: 'Continuous Competitive Habit:',
-        summaryText: 'Monthly contests turn passive syntax learners into battle-tested algorithmic problem solvers solving 250+ challenges in Semester 1.'
+        tabShort: 'Sub-Slide 02',
+        title: 'Subjects',
+        subjects: [
+          { title: 'C Programming', logoSrc: '/assets/c-programming-logo.svg' },
+          { title: 'AI Literacy', logoSrc: '/assets/ai-literacy-logo.svg' }
+        ]
       },
       {
         num: 3,
-        tabTitle: '03. Monthly Typing Contest',
-        tabShort: 'Monthly Typing Contest',
-        headerBadge: 'Velocity Benchmark',
-        subTitle: 'Monthly Typing Contest: Programming Syntax Fluency, 60+ Net WPM & Zero-Friction Muscle Memory',
-        mainHeading: 'Typing Contest Every Month (Syntax & Velocity Mastery)',
-        rightPill: 'Target: 60+ Net WPM • 98%+ Accuracy Gating',
-        icon: '⌨️',
-        kpis: [
-          { value: '60+ WPM', label: 'Target Velocity' },
-          { value: '98%+', label: 'Precision Threshold' },
-          { value: 'Monthly', label: 'Speed Sprints' }
-        ],
-        pillars: [
-          {
-            icon: '⚡',
-            title: 'Programming-Centric Syntax Challenges',
-            tag: 'Code Tokens',
-            desc: 'Contests feature actual programming syntax tokens: curly braces { }, operators &&, ||, brackets [ ], semicolons ;, and indentation.',
-            points: ['✓ Special Character Memory', '✓ Indentation Discipline']
-          },
-          {
-            icon: '🚀',
-            title: 'Speed Milestone Ladders (Target 60+ Net WPM)',
-            tag: 'Velocity Ladders',
-            desc: 'Progressive tiered speed brackets guiding students from beginner baseline speeds (20–30 WPM) systematically upward toward elite benchmarks (50–70+ Net WPM).',
-            points: ['✓ Bronze to Diamond Tiers', '✓ Cadence & Stamina Drills']
-          },
-          {
-            icon: '🎯',
-            title: '98%+ Accuracy Gating & Strict Error Penalties',
-            tag: 'Precision Threshold',
-            desc: 'High-accuracy gating mechanism where typos and excessive backspacing incur net penalties, conditioning error-free drafting reflexes from the first semester.',
-            points: ['✓ Zero-Backspace Conditioning', '✓ Real-Time Error Deductions']
-          },
-          {
-            icon: '🧠',
-            title: 'Cognitive Freedom & Developer Flow State',
-            tag: 'Flow State',
-            desc: 'Subconscious touch typing frees 100% of cognitive bandwidth, allowing students to focus completely on algorithmic solutions rather than looking for keys.',
-            points: ['✓ Zero Friction', '✓ Rapid Prototyping Speed']
-          }
-        ],
-        summaryIcon: '⌨️',
-        summaryTitle: 'The Developer Velocity Foundation:',
-        summaryText: 'Fast, error-free typing turns engineering thoughts into code in seconds. Monthly typing contests guarantee every student attains industry-grade keyboard fluency.'
+        tabShort: 'Sub-Slide 03',
+        featureTitle: 'T-Connect',
+        videoId: 'vpBMPKUCvuY'
       }
     ]
-  },
-  2: {
+  }),
+  2: createSemesterPopup({
     semesterNumber: 2,
     code: 'I-II',
-    yearLabel: 'YEAR 1',
-    phaseTitle: 'BAMBOO CODER — PHASE 2',
-    platformBadge: 'YEAR 1 • SEMESTER 2 ACCELERATED PLATFORM',
-    color: '#0a5830',
     logoSrc: '/assets/bamboo_coder_phase2.png',
     subSlides: [
-      {
-        num: 1,
-        tabTitle: '01. Sub-Slide 01',
-        tabShort: 'Sub-Slide 01',
-        headerBadge: 'Phase 2 Track 01',
-        subTitle: 'Semester 2 Sub-Slide 01 — Framework Ready for Content',
-        mainHeading: 'Sub-Slide 01: Core Topic & Milestone Focus',
-        rightPill: 'Semester 2 (I-II) • Sub-Slide 01 / 03',
-        icon: '📌',
-        kpis: [
-          { value: '01', label: 'Sub-Slide Number' },
-          { value: 'Phase 2', label: 'Bamboo Coder' },
-          { value: 'Ready', label: 'For Content' }
-        ],
-        pillars: [
-          {
-            icon: '1️⃣',
-            title: 'Pillar 01: Key Focus Area',
-            tag: 'Topic Point 1',
-            desc: 'Primary objective and learning milestone for this sub-slide. Ready for detailed description and custom curriculum points.',
-            points: ['• Key Concept 1', '• Practical Focus']
-          },
-          {
-            icon: '2️⃣',
-            title: 'Pillar 02: Platform & Execution Mode',
-            tag: 'Topic Point 2',
-            desc: 'Hands-on practice methodology, contest format, or tool utilization for this event track.',
-            points: ['• Methodology', '• Execution Cadence']
-          },
-          {
-            icon: '3️⃣',
-            title: 'Pillar 03: Assessment & Evaluation Criteria',
-            tag: 'Topic Point 3',
-            desc: 'Scoring benchmarks, performance thresholds, and evaluation criteria required for milestone achievement.',
-            points: ['• Benchmark Metric', '• Evaluation Rule']
-          },
-          {
-            icon: '4️⃣',
-            title: 'Pillar 04: Expected Learning Outcome',
-            tag: 'Topic Point 4',
-            desc: 'Measurable student competencies, engineering skills acquired, and advancement readiness.',
-            points: ['• Target Outcome', '• Competency Milestone']
-          }
-        ],
-        summaryIcon: '📌',
-        summaryTitle: 'Sub-Slide 01 Summary:',
-        summaryText: 'Structured milestone framework for Semester 2 (I-II) Sub-Slide 01. Content can be customized at any time.'
-      },
+      createSelectionShortlistingSlide(),
       {
         num: 2,
-        tabTitle: '02. Sub-Slide 02',
         tabShort: 'Sub-Slide 02',
-        headerBadge: 'Phase 2 Track 02',
-        subTitle: 'Semester 2 Sub-Slide 02 — Framework Ready for Content',
-        mainHeading: 'Sub-Slide 02: Core Topic & Milestone Focus',
-        rightPill: 'Semester 2 (I-II) • Sub-Slide 02 / 03',
-        icon: '📌',
-        kpis: [
-          { value: '02', label: 'Sub-Slide Number' },
-          { value: 'Phase 2', label: 'Bamboo Coder' },
-          { value: 'Ready', label: 'For Content' }
-        ],
-        pillars: [
-          {
-            icon: '1️⃣',
-            title: 'Pillar 01: Key Focus Area',
-            tag: 'Topic Point 1',
-            desc: 'Primary objective and learning milestone for this sub-slide. Ready for detailed description and custom curriculum points.',
-            points: ['• Key Concept 1', '• Practical Focus']
-          },
-          {
-            icon: '2️⃣',
-            title: 'Pillar 02: Platform & Execution Mode',
-            tag: 'Topic Point 2',
-            desc: 'Hands-on practice methodology, contest format, or tool utilization for this event track.',
-            points: ['• Methodology', '• Execution Cadence']
-          },
-          {
-            icon: '3️⃣',
-            title: 'Pillar 03: Assessment & Evaluation Criteria',
-            tag: 'Topic Point 3',
-            desc: 'Scoring benchmarks, performance thresholds, and evaluation criteria required for milestone achievement.',
-            points: ['• Benchmark Metric', '• Evaluation Rule']
-          },
-          {
-            icon: '4️⃣',
-            title: 'Pillar 04: Expected Learning Outcome',
-            tag: 'Topic Point 4',
-            desc: 'Measurable student competencies, engineering skills acquired, and advancement readiness.',
-            points: ['• Target Outcome', '• Competency Milestone']
-          }
-        ],
-        summaryIcon: '📌',
-        summaryTitle: 'Sub-Slide 02 Summary:',
-        summaryText: 'Structured milestone framework for Semester 2 (I-II) Sub-Slide 02. Content can be customized at any time.'
+        title: 'Subjects',
+        subjects: [
+          { title: 'C++', logoSrc: '/assets/cpp-programming-logo.svg' },
+          { title: 'Prompt Engineering', logoSrc: '/assets/prompt-engineering-logo.svg' }
+        ]
       },
       {
         num: 3,
-        tabTitle: '03. Sub-Slide 03',
         tabShort: 'Sub-Slide 03',
-        headerBadge: 'Phase 2 Track 03',
-        subTitle: 'Semester 2 Sub-Slide 03 — Framework Ready for Content',
-        mainHeading: 'Sub-Slide 03: Core Topic & Milestone Focus',
-        rightPill: 'Semester 2 (I-II) • Sub-Slide 03 / 03',
-        icon: '📌',
-        kpis: [
-          { value: '03', label: 'Sub-Slide Number' },
-          { value: 'Phase 2', label: 'Bamboo Coder' },
-          { value: 'Ready', label: 'For Content' }
-        ],
-        pillars: [
-          {
-            icon: '1️⃣',
-            title: 'Pillar 01: Key Focus Area',
-            tag: 'Topic Point 1',
-            desc: 'Primary objective and learning milestone for this sub-slide. Ready for detailed description and custom curriculum points.',
-            points: ['• Key Concept 1', '• Practical Focus']
-          },
-          {
-            icon: '2️⃣',
-            title: 'Pillar 02: Platform & Execution Mode',
-            tag: 'Topic Point 2',
-            desc: 'Hands-on practice methodology, contest format, or tool utilization for this event track.',
-            points: ['• Methodology', '• Execution Cadence']
-          },
-          {
-            icon: '3️⃣',
-            title: 'Pillar 03: Assessment & Evaluation Criteria',
-            tag: 'Topic Point 3',
-            desc: 'Scoring benchmarks, performance thresholds, and evaluation criteria required for milestone achievement.',
-            points: ['• Benchmark Metric', '• Evaluation Rule']
-          },
-          {
-            icon: '4️⃣',
-            title: 'Pillar 04: Expected Learning Outcome',
-            tag: 'Topic Point 4',
-            desc: 'Measurable student competencies, engineering skills acquired, and advancement readiness.',
-            points: ['• Target Outcome', '• Competency Milestone']
-          }
-        ],
-        summaryIcon: '📌',
-        summaryTitle: 'Sub-Slide 03 Summary:',
-        summaryText: 'Structured milestone framework for Semester 2 (I-II) Sub-Slide 03. Content can be customized at any time.'
+        title: 'Monthly Contests',
+        contests: [
+          { title: 'Monthly Coding Contests', icon: 'coding' },
+          { title: 'Monthly Typing Contests', icon: 'typing' }
+        ]
+      },
+      {
+        num: 4,
+        tabShort: 'Sub-Slide 04',
+        featureTitle: 'Hub Hoppers',
+        galleryImages: [
+          { src: '/assets/Hub Hoppers 1.jpg', alt: 'Hub Hoppers ceremony poster' },
+          { src: '/assets/Hub Hoppers 2.jpg', alt: 'Hub Hoppers team and award presentations' },
+          { src: '/assets/hub hoppers 3.jpg', alt: 'Hub Hoppers award recipients' },
+          { src: '/assets/Hub Hoppers 4.jpg', alt: 'Hub Hoppers ceremony highlights' },
+          { src: '/assets/hub hoppwers 5.jpg', alt: 'Hub Hoppers audience at the ceremony', orientation: 'landscape' },
+          { src: '/assets/hub hoppersd 6.jpg', alt: 'Hub Hoppers community photo' }
+        ]
       }
     ]
-  },
-  3: {
+  }),
+  3: createSemesterPopup({
     semesterNumber: 3,
     code: 'II-I',
-    yearLabel: 'YEAR 2',
-    phaseTitle: 'AI READY ENGINEER — SEMESTER 3',
-    platformBadge: 'YEAR 2 • SEMESTER 1 CORE ACCELERATION PLATFORM',
-    color: '#047857',
-    logoSrc: '/assets/ai_ready_engineer.png',
+    logoSrc: '/assets/SKILLUP CODER.png',
     subSlides: [
-      {
-        num: 1,
-        tabTitle: '01. Sub-Slide 01',
-        tabShort: 'Sub-Slide 01',
-        headerBadge: 'Year 2 Sem 1 Track 01',
-        subTitle: 'Semester 3 Sub-Slide 01 — Framework Ready for Content',
-        mainHeading: 'Sub-Slide 01: Core Topic & Milestone Focus',
-        rightPill: 'Semester 3 (II-I) • Sub-Slide 01 / 03',
-        icon: '📌',
-        kpis: [
-          { value: '01', label: 'Sub-Slide Number' },
-          { value: 'Year 2', label: 'AI Ready Engineer' },
-          { value: 'Ready', label: 'For Content' }
-        ],
-        pillars: [
-          {
-            icon: '1️⃣',
-            title: 'Pillar 01: Key Focus Area',
-            tag: 'Topic Point 1',
-            desc: 'Primary objective and learning milestone for this sub-slide. Ready for detailed description and custom curriculum points.',
-            points: ['• Key Concept 1', '• Practical Focus']
-          },
-          {
-            icon: '2️⃣',
-            title: 'Pillar 02: Platform & Execution Mode',
-            tag: 'Topic Point 2',
-            desc: 'Hands-on practice methodology, contest format, or tool utilization for this event track.',
-            points: ['• Methodology', '• Execution Cadence']
-          },
-          {
-            icon: '3️⃣',
-            title: 'Pillar 03: Assessment & Evaluation Criteria',
-            tag: 'Topic Point 3',
-            desc: 'Scoring benchmarks, performance thresholds, and evaluation criteria required for milestone achievement.',
-            points: ['• Benchmark Metric', '• Evaluation Rule']
-          },
-          {
-            icon: '4️⃣',
-            title: 'Pillar 04: Expected Learning Outcome',
-            tag: 'Topic Point 4',
-            desc: 'Measurable student competencies, engineering skills acquired, and advancement readiness.',
-            points: ['• Target Outcome', '• Competency Milestone']
-          }
-        ],
-        summaryIcon: '📌',
-        summaryTitle: 'Sub-Slide 01 Summary:',
-        summaryText: 'Structured milestone framework for Semester 3 (II-I) Sub-Slide 01. Content can be customized at any time.'
-      },
+      createSelectionShortlistingSlide(),
       {
         num: 2,
-        tabTitle: '02. Sub-Slide 02',
         tabShort: 'Sub-Slide 02',
-        headerBadge: 'Year 2 Sem 1 Track 02',
-        subTitle: 'Semester 3 Sub-Slide 02 — Framework Ready for Content',
-        mainHeading: 'Sub-Slide 02: Core Topic & Milestone Focus',
-        rightPill: 'Semester 3 (II-I) • Sub-Slide 02 / 03',
-        icon: '📌',
-        kpis: [
-          { value: '02', label: 'Sub-Slide Number' },
-          { value: 'Year 2', label: 'AI Ready Engineer' },
-          { value: 'Ready', label: 'For Content' }
-        ],
-        pillars: [
-          {
-            icon: '1️⃣',
-            title: 'Pillar 01: Key Focus Area',
-            tag: 'Topic Point 1',
-            desc: 'Primary objective and learning milestone for this sub-slide. Ready for detailed description and custom curriculum points.',
-            points: ['• Key Concept 1', '• Practical Focus']
-          },
-          {
-            icon: '2️⃣',
-            title: 'Pillar 02: Platform & Execution Mode',
-            tag: 'Topic Point 2',
-            desc: 'Hands-on practice methodology, contest format, or tool utilization for this event track.',
-            points: ['• Methodology', '• Execution Cadence']
-          },
-          {
-            icon: '3️⃣',
-            title: 'Pillar 03: Assessment & Evaluation Criteria',
-            tag: 'Topic Point 3',
-            desc: 'Scoring benchmarks, performance thresholds, and evaluation criteria required for milestone achievement.',
-            points: ['• Benchmark Metric', '• Evaluation Rule']
-          },
-          {
-            icon: '4️⃣',
-            title: 'Pillar 04: Expected Learning Outcome',
-            tag: 'Topic Point 4',
-            desc: 'Measurable student competencies, engineering skills acquired, and advancement readiness.',
-            points: ['• Target Outcome', '• Competency Milestone']
-          }
-        ],
-        summaryIcon: '📌',
-        summaryTitle: 'Sub-Slide 02 Summary:',
-        summaryText: 'Structured milestone framework for Semester 3 (II-I) Sub-Slide 02. Content can be customized at any time.'
+        title: 'Subjects',
+        subjects: [
+          { title: 'Operating Systems (OS)', logoSrc: '/assets/operating-systems-logo.svg' },
+          { title: 'Data Structures & Algorithms (DSA)', logoSrc: '/assets/dsa-logo.svg' },
+          { title: 'Algorithmic Prompting & Edge-Case Synthesis', logoSrc: '/assets/algorithmic-prompting-logo.svg' }
+        ]
       },
       {
         num: 3,
-        tabTitle: '03. Sub-Slide 03',
         tabShort: 'Sub-Slide 03',
-        headerBadge: 'Year 2 Sem 1 Track 03',
-        subTitle: 'Semester 3 Sub-Slide 03 — Framework Ready for Content',
-        mainHeading: 'Sub-Slide 03: Core Topic & Milestone Focus',
-        rightPill: 'Semester 3 (II-I) • Sub-Slide 03 / 03',
-        icon: '📌',
-        kpis: [
-          { value: '03', label: 'Sub-Slide Number' },
-          { value: 'Year 2', label: 'AI Ready Engineer' },
-          { value: 'Ready', label: 'For Content' }
-        ],
-        pillars: [
-          {
-            icon: '1️⃣',
-            title: 'Pillar 01: Key Focus Area',
-            tag: 'Topic Point 1',
-            desc: 'Primary objective and learning milestone for this sub-slide. Ready for detailed description and custom curriculum points.',
-            points: ['• Key Concept 1', '• Practical Focus']
-          },
-          {
-            icon: '2️⃣',
-            title: 'Pillar 02: Platform & Execution Mode',
-            tag: 'Topic Point 2',
-            desc: 'Hands-on practice methodology, contest format, or tool utilization for this event track.',
-            points: ['• Methodology', '• Execution Cadence']
-          },
-          {
-            icon: '3️⃣',
-            title: 'Pillar 03: Assessment & Evaluation Criteria',
-            tag: 'Topic Point 3',
-            desc: 'Scoring benchmarks, performance thresholds, and evaluation criteria required for milestone achievement.',
-            points: ['• Benchmark Metric', '• Evaluation Rule']
-          },
-          {
-            icon: '4️⃣',
-            title: 'Pillar 04: Expected Learning Outcome',
-            tag: 'Topic Point 4',
-            desc: 'Measurable student competencies, engineering skills acquired, and advancement readiness.',
-            points: ['• Target Outcome', '• Competency Milestone']
-          }
-        ],
-        summaryIcon: '📌',
-        summaryTitle: 'Sub-Slide 03 Summary:',
-        summaryText: 'Structured milestone framework for Semester 3 (II-I) Sub-Slide 03. Content can be customized at any time.'
+        featureTitle: 'T-Square',
+        galleryImages: [
+          { src: '/assets/t-square-clean-01.jpg', alt: 'T Square event group photo', orientation: 'landscape' },
+          { src: '/assets/t-square-clean-02.jpg', alt: 'T Square students at the event', orientation: 'wide' },
+          { src: '/assets/t-square-clean-03.jpg', alt: 'T Square event group photo', orientation: 'wide' },
+          { src: '/assets/t-square-clean-04.jpg', alt: 'T Square audience at an exhibit', orientation: 'wide' },
+          { src: '/assets/t-square-clean-05.jpg', alt: 'T Square students gathered at a presentation', orientation: 'wide' },
+          { src: '/assets/t-square-clean-06.jpg', alt: 'T Square event audience', orientation: 'wide' },
+          { src: '/assets/t-square-clean-07.jpg', alt: 'Students viewing a T Square demonstration', orientation: 'wide' },
+          { src: '/assets/t-square-clean-08.jpg', alt: 'T Square presentation audience', orientation: 'landscape' }
+        ]
       }
     ]
-  },
-  4: {
+  }),
+  4: createSemesterPopup({
     semesterNumber: 4,
     code: 'II-II',
-    yearLabel: 'YEAR 2',
-    phaseTitle: 'AI READY ENGINEER — SEMESTER 4',
-    platformBadge: 'YEAR 2 • SEMESTER 2 ADVANCED ACCELERATION PLATFORM',
-    color: '#065f46',
-    logoSrc: '/assets/ai_ready_engineer.png',
+    logoSrc: '/assets/SKILLUP CODER.png',
     subSlides: [
-      {
-        num: 1,
-        tabTitle: '01. Sub-Slide 01',
-        tabShort: 'Sub-Slide 01',
-        headerBadge: 'Year 2 Sem 2 Track 01',
-        subTitle: 'Semester 4 Sub-Slide 01 — Framework Ready for Content',
-        mainHeading: 'Sub-Slide 01: Core Topic & Milestone Focus',
-        rightPill: 'Semester 4 (II-II) • Sub-Slide 01 / 03',
-        icon: '📌',
-        kpis: [
-          { value: '01', label: 'Sub-Slide Number' },
-          { value: 'Year 2', label: 'AI Ready Engineer' },
-          { value: 'Ready', label: 'For Content' }
-        ],
-        pillars: [
-          {
-            icon: '1️⃣',
-            title: 'Pillar 01: Key Focus Area',
-            tag: 'Topic Point 1',
-            desc: 'Primary objective and learning milestone for this sub-slide. Ready for detailed description and custom curriculum points.',
-            points: ['• Key Concept 1', '• Practical Focus']
-          },
-          {
-            icon: '2️⃣',
-            title: 'Pillar 02: Platform & Execution Mode',
-            tag: 'Topic Point 2',
-            desc: 'Hands-on practice methodology, contest format, or tool utilization for this event track.',
-            points: ['• Methodology', '• Execution Cadence']
-          },
-          {
-            icon: '3️⃣',
-            title: 'Pillar 03: Assessment & Evaluation Criteria',
-            tag: 'Topic Point 3',
-            desc: 'Scoring benchmarks, performance thresholds, and evaluation criteria required for milestone achievement.',
-            points: ['• Benchmark Metric', '• Evaluation Rule']
-          },
-          {
-            icon: '4️⃣',
-            title: 'Pillar 04: Expected Learning Outcome',
-            tag: 'Topic Point 4',
-            desc: 'Measurable student competencies, engineering skills acquired, and advancement readiness.',
-            points: ['• Target Outcome', '• Competency Milestone']
-          }
-        ],
-        summaryIcon: '📌',
-        summaryTitle: 'Sub-Slide 01 Summary:',
-        summaryText: 'Structured milestone framework for Semester 4 (II-II) Sub-Slide 01. Content can be customized at any time.'
-      },
+      createSelectionShortlistingSlide(),
       {
         num: 2,
-        tabTitle: '02. Sub-Slide 02',
         tabShort: 'Sub-Slide 02',
-        headerBadge: 'Year 2 Sem 2 Track 02',
-        subTitle: 'Semester 4 Sub-Slide 02 — Framework Ready for Content',
-        mainHeading: 'Sub-Slide 02: Core Topic & Milestone Focus',
-        rightPill: 'Semester 4 (II-II) • Sub-Slide 02 / 03',
-        icon: '📌',
-        kpis: [
-          { value: '02', label: 'Sub-Slide Number' },
-          { value: 'Year 2', label: 'AI Ready Engineer' },
-          { value: 'Ready', label: 'For Content' }
-        ],
-        pillars: [
-          {
-            icon: '1️⃣',
-            title: 'Pillar 01: Key Focus Area',
-            tag: 'Topic Point 1',
-            desc: 'Primary objective and learning milestone for this sub-slide. Ready for detailed description and custom curriculum points.',
-            points: ['• Key Concept 1', '• Practical Focus']
-          },
-          {
-            icon: '2️⃣',
-            title: 'Pillar 02: Platform & Execution Mode',
-            tag: 'Topic Point 2',
-            desc: 'Hands-on practice methodology, contest format, or tool utilization for this event track.',
-            points: ['• Methodology', '• Execution Cadence']
-          },
-          {
-            icon: '3️⃣',
-            title: 'Pillar 03: Assessment & Evaluation Criteria',
-            tag: 'Topic Point 3',
-            desc: 'Scoring benchmarks, performance thresholds, and evaluation criteria required for milestone achievement.',
-            points: ['• Benchmark Metric', '• Evaluation Rule']
-          },
-          {
-            icon: '4️⃣',
-            title: 'Pillar 04: Expected Learning Outcome',
-            tag: 'Topic Point 4',
-            desc: 'Measurable student competencies, engineering skills acquired, and advancement readiness.',
-            points: ['• Target Outcome', '• Competency Milestone']
-          }
-        ],
-        summaryIcon: '📌',
-        summaryTitle: 'Sub-Slide 02 Summary:',
-        summaryText: 'Structured milestone framework for Semester 4 (II-II) Sub-Slide 02. Content can be customized at any time.'
+        title: 'Subjects',
+        subjects: [
+          { title: 'Computer Networking', logoSrc: '/assets/computer-networking-logo.svg' },
+          { title: 'DBMS', logoSrc: '/assets/dbms-logo.svg' },
+          { title: 'AI Tool Evaluation and Integration', logoSrc: '/assets/ai-tool-integration-logo.svg' }
+        ]
       },
       {
         num: 3,
-        tabTitle: '03. Sub-Slide 03',
         tabShort: 'Sub-Slide 03',
-        headerBadge: 'Year 2 Sem 2 Track 03',
-        subTitle: 'Semester 4 Sub-Slide 03 — Framework Ready for Content',
-        mainHeading: 'Sub-Slide 03: Core Topic & Milestone Focus',
-        rightPill: 'Semester 4 (II-II) • Sub-Slide 03 / 03',
-        icon: '📌',
-        kpis: [
-          { value: '03', label: 'Sub-Slide Number' },
-          { value: 'Year 2', label: 'AI Ready Engineer' },
-          { value: 'Ready', label: 'For Content' }
-        ],
-        pillars: [
-          {
-            icon: '1️⃣',
-            title: 'Pillar 01: Key Focus Area',
-            tag: 'Topic Point 1',
-            desc: 'Primary objective and learning milestone for this sub-slide. Ready for detailed description and custom curriculum points.',
-            points: ['• Key Concept 1', '• Practical Focus']
-          },
-          {
-            icon: '2️⃣',
-            title: 'Pillar 02: Platform & Execution Mode',
-            tag: 'Topic Point 2',
-            desc: 'Hands-on practice methodology, contest format, or tool utilization for this event track.',
-            points: ['• Methodology', '• Execution Cadence']
-          },
-          {
-            icon: '3️⃣',
-            title: 'Pillar 03: Assessment & Evaluation Criteria',
-            tag: 'Topic Point 3',
-            desc: 'Scoring benchmarks, performance thresholds, and evaluation criteria required for milestone achievement.',
-            points: ['• Benchmark Metric', '• Evaluation Rule']
-          },
-          {
-            icon: '4️⃣',
-            title: 'Pillar 04: Expected Learning Outcome',
-            tag: 'Topic Point 4',
-            desc: 'Measurable student competencies, engineering skills acquired, and advancement readiness.',
-            points: ['• Target Outcome', '• Competency Milestone']
-          }
-        ],
-        summaryIcon: '📌',
-        summaryTitle: 'Sub-Slide 03 Summary:',
-        summaryText: 'Structured milestone framework for Semester 4 (II-II) Sub-Slide 03. Content can be customized at any time.'
+        featureTitle: 'Moon Coders',
+        hideFeatureTitle: true,
+        featureLogoSrc: '/assets/MOON CODER.png',
+        videoId: 'W95j8i1LnbA',
+        logoOptions: [
+          { src: '/assets/SKILLUP CODER.png', alt: 'Skill Up Coder logo' },
+          { src: '/assets/MOON CODER.png', alt: 'Moon Coders logo' }
+        ]
       }
     ]
-  },
-  5: {
+  }),
+  5: createSemesterPopup({
     semesterNumber: 5,
     code: 'III-I',
-    yearLabel: 'YEAR 3',
-    phaseTitle: 'AI READY ENGINEER — SEMESTER 5',
-    platformBadge: 'YEAR 3 • SEMESTER 1 INDUSTRY DEPLOYMENT PLATFORM',
-    color: '#0d6838',
     logoSrc: '/assets/ai_ready_engineer.png',
+    logoOptions: [
+      { src: '/assets/ai_ready_engineer.png', alt: 'AI Ready Engineer logo' },
+      {
+        src: '/assets/drive-ready-logo.svg',
+        alt: 'Drive Ready logo',
+        height: 'clamp(100px, 11vh, 126px)',
+        maxWidth: 'min(40vw, 480px)'
+      }
+    ],
     subSlides: [
       {
         num: 1,
-        tabTitle: '01. Sub-Slide 01',
         tabShort: 'Sub-Slide 01',
-        headerBadge: 'Year 3 Sem 1 Track 01',
-        subTitle: 'Semester 5 Sub-Slide 01 — Framework Ready for Content',
-        mainHeading: 'Sub-Slide 01: Core Topic & Milestone Focus',
-        rightPill: 'Semester 5 (III-I) • Sub-Slide 01 / 03',
-        icon: '📌',
-        kpis: [
-          { value: '01', label: 'Sub-Slide Number' },
-          { value: 'Year 3', label: 'AI Ready Engineer' },
-          { value: 'Ready', label: 'For Content' }
-        ],
-        pillars: [
-          {
-            icon: '1️⃣',
-            title: 'Pillar 01: Key Focus Area',
-            tag: 'Topic Point 1',
-            desc: 'Primary objective and learning milestone for this sub-slide. Ready for detailed description and custom curriculum points.',
-            points: ['• Key Concept 1', '• Practical Focus']
-          },
-          {
-            icon: '2️⃣',
-            title: 'Pillar 02: Platform & Execution Mode',
-            tag: 'Topic Point 2',
-            desc: 'Hands-on practice methodology, contest format, or tool utilization for this event track.',
-            points: ['• Methodology', '• Execution Cadence']
-          },
-          {
-            icon: '3️⃣',
-            title: 'Pillar 03: Assessment & Evaluation Criteria',
-            tag: 'Topic Point 3',
-            desc: 'Scoring benchmarks, performance thresholds, and evaluation criteria required for milestone achievement.',
-            points: ['• Benchmark Metric', '• Evaluation Rule']
-          },
-          {
-            icon: '4️⃣',
-            title: 'Pillar 04: Expected Learning Outcome',
-            tag: 'Topic Point 4',
-            desc: 'Measurable student competencies, engineering skills acquired, and advancement readiness.',
-            points: ['• Target Outcome', '• Competency Milestone']
-          }
-        ],
-        summaryIcon: '📌',
-        summaryTitle: 'Sub-Slide 01 Summary:',
-        summaryText: 'Structured milestone framework for Semester 5 (III-I) Sub-Slide 01. Content can be customized at any time.'
+        title: 'Choose a learning track',
+        trackChoices: [
+          { id: 'ai-ready-engineer', title: 'AI Ready Engineer', logoSrc: '/assets/ai_ready_engineer.png' },
+          { id: 'drive-ready', title: 'Drive Ready', logoSrc: '/assets/drive-ready-logo.svg' }
+        ]
       },
       {
         num: 2,
-        tabTitle: '02. Sub-Slide 02',
         tabShort: 'Sub-Slide 02',
-        headerBadge: 'Year 3 Sem 1 Track 02',
-        subTitle: 'Semester 5 Sub-Slide 02 — Framework Ready for Content',
-        mainHeading: 'Sub-Slide 02: Core Topic & Milestone Focus',
-        rightPill: 'Semester 5 (III-I) • Sub-Slide 02 / 03',
-        icon: '📌',
-        kpis: [
-          { value: '02', label: 'Sub-Slide Number' },
-          { value: 'Year 3', label: 'AI Ready Engineer' },
-          { value: 'Ready', label: 'For Content' }
-        ],
-        pillars: [
-          {
-            icon: '1️⃣',
-            title: 'Pillar 01: Key Focus Area',
-            tag: 'Topic Point 1',
-            desc: 'Primary objective and learning milestone for this sub-slide. Ready for detailed description and custom curriculum points.',
-            points: ['• Key Concept 1', '• Practical Focus']
-          },
-          {
-            icon: '2️⃣',
-            title: 'Pillar 02: Platform & Execution Mode',
-            tag: 'Topic Point 2',
-            desc: 'Hands-on practice methodology, contest format, or tool utilization for this event track.',
-            points: ['• Methodology', '• Execution Cadence']
-          },
-          {
-            icon: '3️⃣',
-            title: 'Pillar 03: Assessment & Evaluation Criteria',
-            tag: 'Topic Point 3',
-            desc: 'Scoring benchmarks, performance thresholds, and evaluation criteria required for milestone achievement.',
-            points: ['• Benchmark Metric', '• Evaluation Rule']
-          },
-          {
-            icon: '4️⃣',
-            title: 'Pillar 04: Expected Learning Outcome',
-            tag: 'Topic Point 4',
-            desc: 'Measurable student competencies, engineering skills acquired, and advancement readiness.',
-            points: ['• Target Outcome', '• Competency Milestone']
-          }
-        ],
-        summaryIcon: '📌',
-        summaryTitle: 'Sub-Slide 02 Summary:',
-        summaryText: 'Structured milestone framework for Semester 5 (III-I) Sub-Slide 02. Content can be customized at any time.'
+        featureTitle: 'Training',
+        videoId: 'J7rIcZ-YoRg'
       },
       {
         num: 3,
-        tabTitle: '03. Sub-Slide 03',
         tabShort: 'Sub-Slide 03',
-        headerBadge: 'Year 3 Sem 1 Track 03',
-        subTitle: 'Semester 5 Sub-Slide 03 — Framework Ready for Content',
-        mainHeading: 'Sub-Slide 03: Core Topic & Milestone Focus',
-        rightPill: 'Semester 5 (III-I) • Sub-Slide 03 / 03',
-        icon: '📌',
-        kpis: [
-          { value: '03', label: 'Sub-Slide Number' },
-          { value: 'Year 3', label: 'AI Ready Engineer' },
-          { value: 'Ready', label: 'For Content' }
-        ],
-        pillars: [
+        title: 'Selection Process',
+        description: 'Complete the five rounds, then submit the undertaking form.',
+        stages: [
+          { title: 'Aptitude & Logic Test', description: 'Round 1 of the selection process.' },
+          { title: 'Beginner Coding', description: 'Round 2 of the selection process.' },
+          { title: 'Advanced Coding', description: 'Round 3 of the selection process.' },
+          { title: 'Technical Interview', description: 'Round 4 of the selection process.' },
+          { title: 'Communication Interview', description: 'Round 5 of the selection process.' },
           {
-            icon: '1️⃣',
-            title: 'Pillar 01: Key Focus Area',
-            tag: 'Topic Point 1',
-            desc: 'Primary objective and learning milestone for this sub-slide. Ready for detailed description and custom curriculum points.',
-            points: ['• Key Concept 1', '• Practical Focus']
-          },
-          {
-            icon: '2️⃣',
-            title: 'Pillar 02: Platform & Execution Mode',
-            tag: 'Topic Point 2',
-            desc: 'Hands-on practice methodology, contest format, or tool utilization for this event track.',
-            points: ['• Methodology', '• Execution Cadence']
-          },
-          {
-            icon: '3️⃣',
-            title: 'Pillar 03: Assessment & Evaluation Criteria',
-            tag: 'Topic Point 3',
-            desc: 'Scoring benchmarks, performance thresholds, and evaluation criteria required for milestone achievement.',
-            points: ['• Benchmark Metric', '• Evaluation Rule']
-          },
-          {
-            icon: '4️⃣',
-            title: 'Pillar 04: Expected Learning Outcome',
-            tag: 'Topic Point 4',
-            desc: 'Measurable student competencies, engineering skills acquired, and advancement readiness.',
-            points: ['• Target Outcome', '• Competency Milestone']
+            title: 'Undertaking Form Submission',
+            description: 'Final step: submit the undertaking form.',
+            final: true
           }
         ],
-        summaryIcon: '📌',
-        summaryTitle: 'Sub-Slide 03 Summary:',
-        summaryText: 'Structured milestone framework for Semester 5 (III-I) Sub-Slide 03. Content can be customized at any time.'
+        outcome: 'The student must submit the undertaking form after completing the five rounds.'
+      },
+      {
+        num: 4,
+        tabShort: 'Sub-Slide 04',
+        logoOptions: [
+          { src: '/assets/drive-ready-logo.svg', alt: 'Drive Ready logo' }
+        ]
+      },
+      {
+        num: 5,
+        tabShort: 'Sub-Slide 05',
+        logoOptions: [
+          { src: '/assets/ai_ready_engineer.png', alt: 'AI Ready Engineer logo' }
+        ]
+      },
+      {
+        num: 6,
+        tabShort: 'Sub-Slide 06',
+        featureTitle: 'Project Week',
+        galleryImages: [
+          { src: '/assets/project-week-gallery/project-week-01.jpg', alt: 'Project Week activity 1', orientation: 'photo-landscape' },
+          { src: '/assets/project-week-gallery/project-week-02.jpg', alt: 'Project Week activity 2', orientation: 'photo-landscape' },
+          { src: '/assets/project-week-gallery/project-week-03.jpg', alt: 'Project Week activity 3', orientation: 'photo-landscape' },
+          { src: '/assets/project-week-gallery/project-week-04.jpg', alt: 'Project Week activity 4', orientation: 'photo-landscape' },
+          { src: '/assets/project-week-gallery/project-week-05.jpg', alt: 'Project Week activity 5', orientation: 'photo-landscape' },
+          { src: '/assets/project-week-gallery/project-week-06.jpg', alt: 'Project Week activity 6', orientation: 'standard-landscape' },
+          { src: '/assets/project-week-gallery/project-week-07.jpg', alt: 'Project Week activity 7', orientation: 'standard-landscape' },
+          { src: '/assets/project-week-gallery/project-week-08.jpg', alt: 'Project Week activity 8', orientation: 'standard-landscape' }
+        ]
+      },
+      {
+        num: 7,
+        tabShort: 'Sub-Slide 07',
+        featureTitle: 'Owl Coder Selections',
+        featureLogoSrc: '/assets/Owl Coder Gradient Mascot Logo.png'
       }
     ]
-  },
-  6: {
+  }),
+  6: createSemesterPopup({
     semesterNumber: 6,
     code: 'III-II',
-    yearLabel: 'YEAR 3',
-    phaseTitle: 'AI READY ENGINEER — SEMESTER 6',
-    platformBadge: 'YEAR 3 • SEMESTER 2 PRE-PLACEMENT ACCELERATION',
-    color: '#15803d',
     logoSrc: '/assets/ai_ready_engineer.png',
+    logoOptions: [
+      { src: '/assets/ai_ready_engineer.png', alt: 'AI Ready Engineer logo' },
+      {
+        src: '/assets/drive-ready-logo.svg',
+        alt: 'Drive Ready logo',
+        height: 'clamp(100px, 11vh, 126px)',
+        maxWidth: 'min(40vw, 480px)'
+      },
+      { src: '/assets/Owl Coder Gradient Mascot Logo.png', alt: 'Owl Coder logo' }
+    ],
     subSlides: [
       {
         num: 1,
-        tabTitle: '01. Sub-Slide 01',
         tabShort: 'Sub-Slide 01',
-        headerBadge: 'Year 3 Sem 2 Track 01',
-        subTitle: 'Semester 6 Sub-Slide 01 — Framework Ready for Content',
-        mainHeading: 'Sub-Slide 01: Core Topic & Milestone Focus',
-        rightPill: 'Semester 6 (III-II) • Sub-Slide 01 / 03',
-        icon: '📌',
-        kpis: [
-          { value: '01', label: 'Sub-Slide Number' },
-          { value: 'Year 3', label: 'AI Ready Engineer' },
-          { value: 'Ready', label: 'For Content' }
-        ],
-        pillars: [
-          {
-            icon: '1️⃣',
-            title: 'Pillar 01: Key Focus Area',
-            tag: 'Topic Point 1',
-            desc: 'Primary objective and learning milestone for this sub-slide. Ready for detailed description and custom curriculum points.',
-            points: ['• Key Concept 1', '• Practical Focus']
-          },
-          {
-            icon: '2️⃣',
-            title: 'Pillar 02: Platform & Execution Mode',
-            tag: 'Topic Point 2',
-            desc: 'Hands-on practice methodology, contest format, or tool utilization for this event track.',
-            points: ['• Methodology', '• Execution Cadence']
-          },
-          {
-            icon: '3️⃣',
-            title: 'Pillar 03: Assessment & Evaluation Criteria',
-            tag: 'Topic Point 3',
-            desc: 'Scoring benchmarks, performance thresholds, and evaluation criteria required for milestone achievement.',
-            points: ['• Benchmark Metric', '• Evaluation Rule']
-          },
-          {
-            icon: '4️⃣',
-            title: 'Pillar 04: Expected Learning Outcome',
-            tag: 'Topic Point 4',
-            desc: 'Measurable student competencies, engineering skills acquired, and advancement readiness.',
-            points: ['• Target Outcome', '• Competency Milestone']
-          }
-        ],
-        summaryIcon: '📌',
-        summaryTitle: 'Sub-Slide 01 Summary:',
-        summaryText: 'Structured milestone framework for Semester 6 (III-II) Sub-Slide 01. Content can be customized at any time.'
+        title: 'Selection Process',
+        stages: [
+          { title: 'Aptitude & Logic Test', icon: 'aptitude' },
+          { title: 'Beginner Coding', icon: 'beginnerCoding' },
+          { title: 'Intermediate Coding', icon: 'intermediateCoding' },
+          { title: 'Advanced Coding', icon: 'advancedCoding' },
+          { title: 'Technical Interview', icon: 'technicalInterview' },
+          { title: 'Communication Interview', icon: 'communicationInterview' }
+        ]
       },
       {
         num: 2,
-        tabTitle: '02. Sub-Slide 02',
         tabShort: 'Sub-Slide 02',
-        headerBadge: 'Year 3 Sem 2 Track 02',
-        subTitle: 'Semester 6 Sub-Slide 02 — Framework Ready for Content',
-        mainHeading: 'Sub-Slide 02: Core Topic & Milestone Focus',
-        rightPill: 'Semester 6 (III-II) • Sub-Slide 02 / 03',
-        icon: '📌',
-        kpis: [
-          { value: '02', label: 'Sub-Slide Number' },
-          { value: 'Year 3', label: 'AI Ready Engineer' },
-          { value: 'Ready', label: 'For Content' }
-        ],
-        pillars: [
-          {
-            icon: '1️⃣',
-            title: 'Pillar 01: Key Focus Area',
-            tag: 'Topic Point 1',
-            desc: 'Primary objective and learning milestone for this sub-slide. Ready for detailed description and custom curriculum points.',
-            points: ['• Key Concept 1', '• Practical Focus']
-          },
-          {
-            icon: '2️⃣',
-            title: 'Pillar 02: Platform & Execution Mode',
-            tag: 'Topic Point 2',
-            desc: 'Hands-on practice methodology, contest format, or tool utilization for this event track.',
-            points: ['• Methodology', '• Execution Cadence']
-          },
-          {
-            icon: '3️⃣',
-            title: 'Pillar 03: Assessment & Evaluation Criteria',
-            tag: 'Topic Point 3',
-            desc: 'Scoring benchmarks, performance thresholds, and evaluation criteria required for milestone achievement.',
-            points: ['• Benchmark Metric', '• Evaluation Rule']
-          },
-          {
-            icon: '4️⃣',
-            title: 'Pillar 04: Expected Learning Outcome',
-            tag: 'Topic Point 4',
-            desc: 'Measurable student competencies, engineering skills acquired, and advancement readiness.',
-            points: ['• Target Outcome', '• Competency Milestone']
-          }
-        ],
-        summaryIcon: '📌',
-        summaryTitle: 'Sub-Slide 02 Summary:',
-        summaryText: 'Structured milestone framework for Semester 6 (III-II) Sub-Slide 02. Content can be customized at any time.'
+        videoId: 't9aB4kHGk0w'
+      },
+      { num: 3, tabShort: 'Sub-Slide 03' }
+    ]
+  }),
+  7: createSemesterPopup({
+    semesterNumber: 7,
+    code: 'IV-I',
+    logoSrc: '/assets/Project Space.png',
+    logoOptions: [
+      { src: '/assets/Project Space.png', alt: 'Project Space logo' },
+      { src: '/assets/Owl Coder Gradient Mascot Logo.png', alt: 'Owl Coder logo' }
+    ],
+    subSlides: [
+      {
+        num: 1,
+        tabShort: 'Sub-Slide 01',
+        featureTitle: 'Project Space',
+        showImageNumbers: true,
+        galleryImages: [
+          { src: '/assets/project space/1.jpg', alt: 'Project Space event photo 1', orientation: 'standard-landscape' },
+          { src: '/assets/project space/2.jpg', alt: 'Project Space event photo 2' },
+          { src: '/assets/project space/3.jpg', alt: 'Project Space event photo 3' },
+          { src: '/assets/project space/4.jpg', alt: 'Project Space event photo 4', orientation: 'standard-landscape' },
+          { src: '/assets/project space/5.jpg', alt: 'Project Space event photo 5' },
+          { src: '/assets/project space/5 (1).jpg', alt: 'Project Space event photo 6' },
+          { src: '/assets/project space/6.jpg', alt: 'Project Space event photo 7' },
+          { src: '/assets/project space/7.jpg', alt: 'Project Space event photo 8' }
+        ]
+      },
+      {
+        num: 2,
+        tabShort: 'Sub-Slide 02',
+        featureTitle: 'Industry Expert Sessions',
+        galleryImages: Array.from({ length: 13 }, (_, index) => ({
+          src: `/assets/project space/guest${index + 1}.jpg`,
+          alt: `Project Space guest session ${index + 1}`,
+          ...(index === 5 ? { orientation: 'standard-landscape' } : {})
+        }))
       },
       {
         num: 3,
-        tabTitle: '03. Sub-Slide 03',
         tabShort: 'Sub-Slide 03',
-        headerBadge: 'Year 3 Sem 2 Track 03',
-        subTitle: 'Semester 6 Sub-Slide 03 — Framework Ready for Content',
-        mainHeading: 'Sub-Slide 03: Core Topic & Milestone Focus',
-        rightPill: 'Semester 6 (III-II) • Sub-Slide 03 / 03',
-        icon: '📌',
-        kpis: [
-          { value: '03', label: 'Sub-Slide Number' },
-          { value: 'Year 3', label: 'AI Ready Engineer' },
-          { value: 'Ready', label: 'For Content' }
-        ],
-        pillars: [
-          {
-            icon: '1️⃣',
-            title: 'Pillar 01: Key Focus Area',
-            tag: 'Topic Point 1',
-            desc: 'Primary objective and learning milestone for this sub-slide. Ready for detailed description and custom curriculum points.',
-            points: ['• Key Concept 1', '• Practical Focus']
-          },
-          {
-            icon: '2️⃣',
-            title: 'Pillar 02: Platform & Execution Mode',
-            tag: 'Topic Point 2',
-            desc: 'Hands-on practice methodology, contest format, or tool utilization for this event track.',
-            points: ['• Methodology', '• Execution Cadence']
-          },
-          {
-            icon: '3️⃣',
-            title: 'Pillar 03: Assessment & Evaluation Criteria',
-            tag: 'Topic Point 3',
-            desc: 'Scoring benchmarks, performance thresholds, and evaluation criteria required for milestone achievement.',
-            points: ['• Benchmark Metric', '• Evaluation Rule']
-          },
-          {
-            icon: '4️⃣',
-            title: 'Pillar 04: Expected Learning Outcome',
-            tag: 'Topic Point 4',
-            desc: 'Measurable student competencies, engineering skills acquired, and advancement readiness.',
-            points: ['• Target Outcome', '• Competency Milestone']
-          }
-        ],
-        summaryIcon: '📌',
-        summaryTitle: 'Sub-Slide 03 Summary:',
-        summaryText: 'Structured milestone framework for Semester 6 (III-II) Sub-Slide 03. Content can be customized at any time.'
-      }
+        featureTitle: 'Project Street',
+        galleryImages: [
+          ...Array.from({ length: 11 }, (_, index) => ({
+            src: `/assets/project space/street${index + 1}.jpg`,
+            alt: `Project Street event photo ${index + 1}`,
+            ...([1, 5].includes(index + 1) ? { orientation: 'standard-landscape' } : {})
+          })),
+          { src: '/assets/project space/claude.jpg', alt: 'Claude display at Project Street', orientation: 'standard-landscape' }
+        ]
+      },
+      {
+        num: 4,
+        tabShort: 'Sub-Slide 04',
+        featureTitle: 'Project Space',
+        videoId: '2YpciZnl2h8'
+      },
     ]
-  }
+  }),
+  8: createSemesterPopup({
+    semesterNumber: 8,
+    code: 'IV-II',
+    logoSrc: '/assets/ai_ready_engineer.png'
+  })
 };
